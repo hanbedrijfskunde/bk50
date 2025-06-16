@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # Backend service (de Python API)
+  backend:
+    build: ./backend
+    container_name: bk50-backend
+    ports:
+      # AANGEPAST: We koppelen nu poort 5001 van je Mac aan poort 5000 in de container
+      - "5001:5000"
+    environment:
+      # Hier kun je je Baserow API key als environment variable meegeven
+      # Dit is veiliger dan het hardcoden in de app.py
+      - BASEROW_API_KEY=mYv2hg8y8yh2oPGnbPCkwWauK38Ycml7
+
+  # Frontend service (de HTML/CSS/JS website)
+  frontend:
+    build: ./frontend
+    container_name: bk50-frontend
+    ports:
+      - "8080:80" # Koppel poort 8080 van je machine aan poort 80 van de container
+    depends_on:
+      - backend # Zorgt ervoor dat de backend start voordat de frontend start
