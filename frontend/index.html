@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Workshop: Wie is de Bedrijfskundige van Morgen?</title>
 		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -105,7 +106,7 @@
 				z-index: 10;
 			}
 
-			/* Form & Tab Styles (unchanged) */
+			/* Form & Tab Styles */
 			.tab-button-container {
 				position: relative;
 			}
@@ -114,7 +115,7 @@
 				bottom: -2px;
 				height: 3px;
 				background-color: #2563eb;
-				border-radius: 999px;
+				border-radius: 9999px;
 				transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
 					width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 			}
@@ -173,11 +174,29 @@
 				opacity: 1;
 			}
 
-			.rating-star {
-				color: #f59e0b;
+			/* Timer Styles */
+			#workshop-timer {
+				position: fixed;
+				bottom: 2rem;
+				right: 2rem;
+				width: 200px;
+				height: 200px;
+				background-color: white;
+				border-radius: 9999px;
+				box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+					0 4px 6px -4px rgb(0 0 0 / 0.1);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				z-index: 40;
+				transition: transform 0.3s ease;
 			}
-			.rating-star-empty {
-				color: #d1d5db;
+			#workshop-timer:hover {
+				transform: scale(1.05);
+			}
+			#timer-progress-circle {
+				transform: rotate(-90deg); /* Start from the top */
 			}
 		</style>
 	</head>
@@ -210,7 +229,6 @@
 					Wat wordt de volgende stap?
 				</p>
 				<div class="timeline-container">
-					<!-- BK 1.0 -->
 					<div class="timeline-item">
 						<div class="timeline-dot">1.0</div>
 						<div class="bg-white p-6 rounded-lg shadow-md h-full">
@@ -228,7 +246,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- BK 2.0 -->
 					<div class="timeline-item">
 						<div class="timeline-dot">2.0</div>
 						<div class="bg-white p-6 rounded-lg shadow-md h-full">
@@ -250,7 +267,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- BK 3.0 -->
 					<div class="timeline-item">
 						<div class="timeline-dot">3.0</div>
 						<div class="bg-white p-6 rounded-lg shadow-md h-full">
@@ -272,7 +288,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- BK 4.0 -->
 					<div class="timeline-item">
 						<div class="timeline-dot">4.0</div>
 						<div class="bg-white p-6 rounded-lg shadow-md h-full">
@@ -298,7 +313,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- BK 5.0 -->
 					<div class="timeline-item">
 						<div class="timeline-dot bg-indigo-600 text-white">?</div>
 						<div
@@ -321,16 +335,14 @@
 					Verken de Thema's & Kies Je Voorkeur
 				</h2>
 				<p class="text-center text-gray-600 mb-10 max-w-4xl mx-auto">
-					Hieronder vind je vijf kernthema's die de toekomst van bedrijfskunde
-					vormgeven. Verken de programma's en de voorbereidende opdrachten. Geef
-					daarna via het
+					Hieronder vind je vijf kernthema's. Verken de programma's en de
+					voorbereidende opdrachten. Geef daarna via het
 					<a
 						href="#voorkeur-form"
 						class="text-blue-600 hover:underline font-medium"
 						>formulier</a
 					>
-					je top 3 door. Op basis van de keuzes maken we teams van maximaal 5
-					personen voor de workshopsessie.
+					je top 3 door.
 				</p>
 
 				<div class="tab-button-container mb-8">
@@ -360,7 +372,7 @@
 					<div class="tab-slider"></div>
 				</div>
 
-				<div class="relative min-h-[400px]">
+				<div class="relative min-h-[350px]">
 					<!-- Dynamically loaded content will appear here -->
 				</div>
 			</section>
@@ -376,8 +388,7 @@
 								for="voornaam"
 								class="block text-sm font-medium text-gray-700 mb-1"
 								>Voornaam</label
-							>
-							<input
+							><input
 								type="text"
 								id="voornaam"
 								name="voornaam"
@@ -391,8 +402,7 @@
 									for="voorkeur1"
 									class="block text-sm font-medium text-gray-700 mb-1"
 									>Voorkeur 1</label
-								>
-								<select
+								><select
 									id="voorkeur1"
 									name="voorkeur1"
 									required
@@ -415,8 +425,7 @@
 									for="voorkeur2"
 									class="block text-sm font-medium text-gray-700 mb-1"
 									>Voorkeur 2</label
-								>
-								<select
+								><select
 									id="voorkeur2"
 									name="voorkeur2"
 									required
@@ -439,8 +448,7 @@
 									for="voorkeur3"
 									class="block text-sm font-medium text-gray-700 mb-1"
 									>Voorkeur 3</label
-								>
-								<select
+								><select
 									id="voorkeur3"
 									name="voorkeur3"
 									required
@@ -495,10 +503,6 @@
 				<h4 class="font-semibold text-lg mt-6 mb-2">
 					Voorbereiding & Huiswerk
 				</h4>
-				<p class="mb-4">
-					Om het meeste uit dit thema te halen, vragen we je het volgende voor
-					te bereiden:
-				</p>
 				<ol class="list-decimal list-inside space-y-3 mb-4 text-gray-700">
 					<li>
 						<strong>Lees:</strong>
@@ -507,7 +511,7 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Systems-based approach to business management</a
+							>Open strategy and dynamic capabilities...</a
 						>
 					</li>
 					<li>
@@ -517,13 +521,13 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Adopt Open Strategy to Fuel Innovation</a
+							>Business ecosystems: A new way of thinking</a
 						>
 					</li>
 					<li>
-						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-						study van een succesvol business ecosysteem (bv. in tech, mobiliteit
-						of energie) en neem dit mee naar de sessie.
+						<strong>Breng mee:</strong> Zoek zelf een actueel voorbeeld van een
+						succesvol business ecosysteem (bv. in tech, mobiliteit of energie)
+						en neem dit mee naar de sessie.
 					</li>
 				</ol>
 				<button
@@ -534,7 +538,6 @@
 				</button>
 			</div>
 		</div>
-
 		<div id="modal2" class="modal-backdrop">
 			<div
 				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
@@ -556,7 +559,7 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>HAI AI Index Report 2025</a
+							>Agentic AI Is Already Changing the Workforce</a
 						>
 					</li>
 					<li>
@@ -566,15 +569,13 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Positive-Sum Automation & Artificial Intelligence</a
+							>How to get empowered by AI</a
 						>
 					</li>
 					<li>
-						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-						study van een succesvolle implementatie van Agentic AI t.b.v.
-						operational excellence. Dit kan een video, artikel of andere bron
-						zijn die je inzichten biedt in de toepassing van AI in een zakelijke
-						context.
+						<strong>Breng mee:</strong> Bedenk een taak binnen je eigen werk (of
+						dat van een student) die je door een 'AI-agent' zou kunnen laten
+						uitvoeren. Neem dit idee mee.
 					</li>
 				</ol>
 				<button
@@ -585,7 +586,6 @@
 				</button>
 			</div>
 		</div>
-
 		<div id="modal3" class="modal-backdrop">
 			<div
 				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
@@ -607,7 +607,7 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Bringing True Strategic Foresight Back to Business</a
+							>Building dynamic capabilities for digital transformation...</a
 						>
 					</li>
 					<li>
@@ -617,14 +617,19 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>The Infinite Game</a
+							>How to Predict the Future</a
 						>
 					</li>
 					<li>
-						<strong>Breng mee:</strong> Een trend of wildcard uit een recent,
-						gezaghebbend foresight-rapport (gepubliceerd in de afgelopen 12
-						maanden) met een uitleg waarom die relevant is voor de evolutie van
-						het vakgebied.
+						<strong>Breng mee:</strong> Identificeer één belangrijke
+						technologische of maatschappelijke trend uit het
+						<a
+							href="https://www.ftsg.com/trends"
+							target="_blank"
+							class="text-blue-600 hover:underline"
+							>FTSG Trend Report</a
+						>
+						die impact heeft op een branche naar keuze.
 					</li>
 				</ol>
 				<button
@@ -635,7 +640,6 @@
 				</button>
 			</div>
 		</div>
-
 		<div id="modal4" class="modal-backdrop">
 			<div
 				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
@@ -657,7 +661,7 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Sustainable by design</a
+							>PwC's Trust in AI Report</a
 						>
 					</li>
 					<li>
@@ -667,13 +671,13 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Inspiring Ethics: Designing More Moral Leaders</a
+							>The ethical dilemma of self-driving cars</a
 						>
 					</li>
 					<li>
-						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-						study (≤ 2 jaar oud) rond een ethisch dilemma, geanalyseerd met een
-						erkend ethisch raamwerk
+						<strong>Breng mee:</strong> Zoek een recent nieuwsbericht waarin een
+						ethisch dilemma rondom technologie of data centraal staat. Neem dit
+						mee naar de sessie.
 					</li>
 				</ol>
 				<button
@@ -684,7 +688,6 @@
 				</button>
 			</div>
 		</div>
-
 		<div id="modal5" class="modal-backdrop">
 			<div
 				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
@@ -707,7 +710,7 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Building dynamic capabilities for digital transformation</a
+							>A Systematic Review ... on Digital Transformation</a
 						>
 					</li>
 					<li>
@@ -717,13 +720,13 @@
 							href="#"
 							target="_blank"
 							class="text-blue-600 hover:underline"
-							>Building a Winning Workplace Culture</a
+							>Leading Change: John Kotter</a
 						>
 					</li>
 					<li>
-						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-						study over een mislukte of succesvolle organisatie-transformatie en
-						benoem de belangrijkste faal- c.q. succesfactoren.
+						<strong>Breng mee:</strong> Denk aan een (mislukte) verandering die
+						je hebt meegemaakt in een organisatie. Wat was volgens jou de
+						belangrijkste reden voor het falen?
 					</li>
 				</ol>
 				<button
@@ -735,38 +738,134 @@
 			</div>
 		</div>
 
+		<!-- Workshop Timer Widget -->
+		<div id="workshop-timer">
+			<div class="absolute w-full h-full">
+				<svg class="w-full h-full" viewBox="0 0 100 100">
+					<circle
+						class="text-gray-200"
+						stroke-width="8"
+						stroke="currentColor"
+						fill="transparent"
+						r="45"
+						cx="50"
+						cy="50"
+					/>
+					<circle
+						id="timer-progress-circle"
+						class="text-blue-600"
+						stroke-width="8"
+						stroke-linecap="round"
+						stroke="currentColor"
+						fill="transparent"
+						r="45"
+						cx="50"
+						cy="50"
+						style="transition: stroke-dashoffset 1s linear"
+					/>
+				</svg>
+			</div>
+			<div id="timer-content" class="text-center">
+				<div id="timer-display" class="text-4xl font-bold text-gray-800">
+					05:00
+				</div>
+				<p
+					id="timer-activity"
+					class="text-sm text-gray-500 max-w-[120px] leading-tight"
+				>
+					Intro & Instructies
+				</p>
+			</div>
+			<div class="absolute bottom-3 flex space-x-2">
+				<button
+					id="timer-control-btn"
+					class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+				<button
+					id="timer-next-btn"
+					class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+							clip-rule="evenodd"
+						/>
+						<path
+							fill-rule="evenodd"
+							d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+				<button
+					id="timer-reset-btn"
+					class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm1 14a1 1 0 011-1h5.001a5.002 5.002 0 00-2.481-4.333 1 1 0 111.332-1.498A7.002 7.002 0 0114.999 13H15a1 1 0 010 2h-5a1 1 0 01-1-1v-5a1 1 0 012 0v2.101z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+			</div>
+		</div>
+
 		<script>
 			document.addEventListener("DOMContentLoaded", function () {
-				// --- DATA OBJECT VOOR HUISWERK ---
-				// Pas hier de URLs aan. Je kunt hier naar je GitHub PDFs verwijzen.
 				const homeworkData = {
 					thema1: {
 						articleUrl:
-							"inspiratie-materiaal/Systems-based approach to contemporary business management.pdf",
-						videoUrl: "https://youtu.be/kg2E3GHnWU0?si=zwoishwkaLzZW42e",
+							"https://onlinelibrary.wiley.com/doi/full/10.1002/bse.3397",
+						videoUrl: "https://www.youtube.com/watch?v=s_S4yTP1YpY",
 					},
 					thema2: {
-						articleUrl: "inspiratie-materiaal/hai_ai_index_report_2025.pdf",
-						videoUrl: "https://youtu.be/tlJQuF2Mxvg?si=C8QnG-YqfiD4sKIA",
+						articleUrl:
+							"https://hbr.org/2025/05/agentic-ai-is-already-changing-the-workforce",
+						videoUrl: "https://www.youtube.com/watch?v=Sqa80mO-g_s",
 					},
 					thema3: {
 						articleUrl:
-							"inspiratie-materiaal/Bringing True Strategic Foresight Back to Business.pdf",
-						videoUrl: "https://youtu.be/tye525dkfi8?si=PsiqMzOeQZU6O1Vd",
+							"https://www.sciencedirect.com/science/article/pii/S002463011830116X",
+						videoUrl: "https://www.youtube.com/watch?v=gN2E6eQa1h4",
 					},
 					thema4: {
 						articleUrl:
-							"inspiratie-materiaal/Coffay and Bocken - 2023 - Sustainable by design An organizational design tool for sustainable business model innovation.pdf",
-						videoUrl: "https://youtu.be/JCnRzABRQ8U?si=fIzYcUQdia2FHZ1Q",
+							"https://www.pwc.com/us/en/services/consulting/library/consumer-intelligence-series/trust-in-ai.html",
+						videoUrl: "https://www.youtube.com/watch?v=2rDPuB44eR4",
 					},
 					thema5: {
 						articleUrl:
-							"inspiratie-materiaal/Building dynamic capabilities for digital transfor.pdf",
-						videoUrl: "https://youtu.be/VAq7qJ2nzAQ?si=7mGxL8apIPYnhtrf",
+							"https://www.researchgate.net/publication/344587568_A_Systematic_Review_of_the_Literature_on_Digital_Transformation_Insights_and_Implications_for_Strategy_and_Organizational_Change",
+						videoUrl: "https://www.youtube.com/watch?v=__sR4gPjC-0",
 					},
 				};
 
-				// Functie om de links in de modals te vullen
 				function populateHomeworkLinks() {
 					for (const [themeKey, urls] of Object.entries(homeworkData)) {
 						const themeNumber = themeKey.replace("thema", "");
@@ -782,17 +881,132 @@
 						if (videoLink) videoLink.href = urls.videoUrl;
 					}
 				}
-
-				// Roep de functie aan zodra de pagina geladen is
 				populateHomeworkLinks();
 
-				// --- FORMULIER LOGICA ---
+				const newProgramList = `
+            <ul class="space-y-3">
+                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-gray-900">Intro & Instructies</strong> (plenair)</span></li>
+                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">5-20'</span><span><strong class="text-gray-900">Brainstorm in team</strong></span></li>
+                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">20-35'</span><span><strong class="text-gray-900">Formulering persona</strong> Bedrijfskundige 5.0</span></li>
+                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">35-50'</span><span><strong class="text-gray-900">AI in Actie:</strong> Live synthese van input</span></li>
+                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">50-60'</span><span><strong class="text-gray-900">Inventarisatie:</strong> Rolbeeld, uitdagingen & benodigdheden?</span></li>
+            </ul>`;
+
+				const themeContents = {
+					thema1: `<div class="bg-white p-8 rounded-lg shadow-lg"><h3 class="text-2xl font-bold mb-2">Thema 1: De Ecosysteem-Architect</h3><p class="font-semibold text-blue-600 mb-4">Focus: Strategie, systeemdenken en cross-sectorale samenwerking.</p><p class="mb-6">Binnen dit thema verkennen we hoe de BK'er 5.0 functioneert als een strategische bouwer van waardeketens en netwerken.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4><div class="space-y-3"><p><strong>Inspiratie:</strong> <span class="rating" data-score="5"></span></p><p><strong>Informatie:</strong> <span class="rating" data-score="4"></span></p><p><strong>Interactie:</strong> <span class="rating" data-score="4"></span></p></div><button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal1')">Bekijk voorbereiding</button></div></div></div>`,
+					thema2: `<div class="bg-white p-8 rounded-lg shadow-lg"><h3 class="text-2xl font-bold mb-2">Thema 2: De Mens-AI Teamleider</h3><p class="font-semibold text-blue-600 mb-4">Focus: Operationele impact AI, nieuwe manieren van werken, en human-centric leiderschap.</p><p class="mb-6">Binnen dit thema zoomen we in op de veranderende rol van de manager die effectief hybride teams van mensen en AI-agenten aanstuurt.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4><div class="space-y-3"><p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p><p><strong>Informatie:</strong> <span class="rating" data-score="4"></span></p><p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p></div><button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal2')">Bekijk voorbereiding</button></div></div></div>`,
+					thema3: `<div class="bg-white p-8 rounded-lg shadow-lg"><h3 class="text-2xl font-bold mb-2">Thema 3: De Toekomst-Verkenner</h3><p class="font-semibold text-blue-600 mb-4">Focus: Dynamische capabilities, trend-sensing en agile strategie.</p><p class="mb-6">Binnen dit thema dagen we je uit om vooruit te kijken en studenten te trainen om proactief te navigeren in een onzekere toekomst.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4><div class="space-y-3"><p><strong>Inspiratie:</strong> <span class="rating" data-score="5"></span></p><p><strong>Informatie:</strong> <span class="rating" data-score="3"></span></p><p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p></div><button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal3')">Bekijk voorbereiding</button></div></div></div>`,
+					thema4: `<div class="bg-white p-8 rounded-lg shadow-lg"><h3 class="text-2xl font-bold mb-2">Thema 4: De Ethische Navigator</h3><p class="font-semibold text-blue-600 mb-4">Focus: Moreel kompas, verantwoord ondernemen en de 'dark side' van technologie.</p><p class="mb-6">Binnen dit thema ontwikkelen we het morele kompas van de bedrijfskundige om verantwoorde beslissingen te nemen in een complexe wereld.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4><div class="space-y-3"><p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p><p><strong>Informatie:</strong> <span class="rating" data-score="5"></span></p><p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p></div><button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal4')">Bekijk voorbereiding</button></div></div></div>`,
+					thema5: `<div class="bg-white p-8 rounded-lg shadow-lg"><h3 class="text-2xl font-bold mb-2">Thema 5: De Transformatie-Driver</h3><p class="font-semibold text-blue-600 mb-4">Focus: Verandermanagement, implementatiekracht en het bouwen van 'dynamic capabilities'.</p><p class="mb-6">Binnen dit thema leiden we doeners op die digitale transformatie in de praktijk kunnen trekken en borgen.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4><div class="space-y-3"><p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p><p><strong>Informatie:</strong> <span class="rating" data-score="5"></span></p><p><strong>Interactie:</strong> <span class="rating" data-score="4"></span></p></div><button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal5')">Bekijk voorbereiding</button></div></div></div>`,
+				};
+
+				const timerContent = document.getElementById("timer-content");
+				const timerDisplay = document.getElementById("timer-display");
+				const activityDisplay = document.getElementById("timer-activity");
+				const progressCircle = document.getElementById("timer-progress-circle");
+				const controlBtn = document.getElementById("timer-control-btn");
+				const nextBtn = document.getElementById("timer-next-btn");
+				const resetBtn = document.getElementById("timer-reset-btn");
+
+				const radius = progressCircle.r.baseVal.value;
+				const circumference = 2 * Math.PI * radius;
+				progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+
+				const activities = [
+					{ name: "Intro & Instructies", duration: 300 },
+					{ name: "Brainstorm in team", duration: 900 },
+					{ name: "Formulering persona", duration: 900 },
+					{ name: "AI in Actie", duration: 900 },
+					{ name: "Inventarisatie", duration: 600 },
+				];
+				let currentActivityIndex = 0;
+				let timeLeft = activities[currentActivityIndex].duration;
+				let timerInterval = null;
+				let isPaused = true;
+
+				function updateDisplay() {
+					const minutes = Math.floor(timeLeft / 60);
+					const seconds = timeLeft % 60;
+					timerDisplay.textContent = `${String(minutes).padStart(
+						2,
+						"0"
+					)}:${String(seconds).padStart(2, "0")}`;
+					activityDisplay.textContent = activities[currentActivityIndex].name;
+					const progress =
+						(activities[currentActivityIndex].duration - timeLeft) /
+						activities[currentActivityIndex].duration;
+					const offset = circumference - progress * circumference;
+					progressCircle.style.strokeDashoffset = offset;
+				}
+
+				function playAlarm() {
+					if (Tone.context.state !== "running") {
+						Tone.context.resume();
+					}
+					const synth = new Tone.Synth().toDestination();
+					synth.triggerAttackRelease("C5", "0.2s", Tone.now());
+					synth.triggerAttackRelease("G5", "0.2s", Tone.now() + 0.3);
+				}
+
+				function nextActivity() {
+					clearInterval(timerInterval);
+					currentActivityIndex++;
+					if (currentActivityIndex >= activities.length) {
+						activityDisplay.textContent = "Workshop klaar!";
+						timerContent.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.562 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a2 2 0 00-1.8 2.4z" />
+                    </svg>`;
+						isPaused = true;
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+						return;
+					}
+					timeLeft = activities[currentActivityIndex].duration;
+					updateDisplay();
+					if (!isPaused) startTimer();
+				}
+
+				function startTimer() {
+					timerInterval = setInterval(() => {
+						timeLeft--;
+						updateDisplay();
+						if (timeLeft <= 0) {
+							playAlarm();
+							nextActivity();
+						}
+					}, 1000);
+				}
+
+				controlBtn.addEventListener("click", () => {
+					isPaused = !isPaused;
+					if (isPaused) {
+						clearInterval(timerInterval);
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+					} else {
+						startTimer();
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
+					}
+				});
+
+				nextBtn.addEventListener("click", () => {
+					playAlarm();
+					nextActivity();
+				});
+
+				resetBtn.addEventListener("click", () => {
+					clearInterval(timerInterval);
+					currentActivityIndex = 0;
+					timeLeft = activities[currentActivityIndex].duration;
+					isPaused = true;
+					timerContent.innerHTML = `<div id="timer-display" class="text-4xl font-bold text-gray-800">05:00</div>
+            <p id="timer-activity" class="text-sm text-gray-500 max-w-[120px] leading-tight">Intro & Instructies</p>`;
+					controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+					updateDisplay();
+				});
+
 				const voorkeurForm = document.getElementById("voorkeur-form");
 				const formFeedback = document.getElementById("form-feedback");
-
 				voorkeurForm.addEventListener("submit", function (event) {
 					event.preventDefault();
-
 					const formData = new FormData(voorkeurForm);
 					const data = {
 						voornaam: formData.get("voornaam"),
@@ -800,23 +1014,18 @@
 						voorkeur2: formData.get("voorkeur2"),
 						voorkeur3: formData.get("voorkeur3"),
 					};
-
-					if (!data.voorkeur1 || !data.voorkeur2 || !data.voorkeur3) {
-						formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Selecteer alsjeblieft drie verschillende voorkeuren.</p>`;
-						return;
-					}
 					if (
+						!data.voorkeur1 ||
+						!data.voorkeur2 ||
+						!data.voorkeur3 ||
 						new Set([data.voorkeur1, data.voorkeur2, data.voorkeur3]).size !== 3
 					) {
-						formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Zorg ervoor dat je drie unieke thema's kiest.</p>`;
+						formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Selecteer alsjeblieft drie unieke voorkeuren.</p>`;
 						return;
 					}
-
 					formFeedback.innerHTML = `<p class="text-blue-600">Voorkeur wordt verstuurd...</p>`;
-
 					const apiUrl =
 						"https://plankton-app-mcr3b.ondigitalocean.app/submit_voorkeur";
-
 					fetch(apiUrl, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
@@ -836,153 +1045,12 @@
 						})
 						.catch((error) => {
 							console.error("API Error:", error);
-							formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Fout bij versturen.</p><p class="text-sm text-gray-500">Kon de lokale backend niet bereiken. Draait de Docker container op poort 5001?</p>`;
+							formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Fout bij versturen.</p><p class="text-sm text-gray-500">Kon de server niet bereiken. Controleer de API URL en de serverlogs.</p>`;
 						});
 				});
-
-				// --- TAB & ALGEMENE UI LOGICA --- (ongewijzigd)
 				const tabs = document.querySelectorAll(".tab-button");
 				const tabSlider = document.querySelector(".tab-slider");
 				const tabContentContainer = document.querySelector(".relative");
-
-				const themeContents = {
-					thema1: `
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Thema 1: De Ecosysteem-Architect</h3>
-                    <p class="font-semibold text-blue-600 mb-4">Focus: Strategie, systeemdenken en cross-sectorale samenwerking.</p>
-                    <p class="mb-6">Deze workshop positioneert de BK'er 5.0 als een strategische bouwer van waardeketens. De centrale vraag: "Hoe leiden we professionals op die niet in organisaties denken, maar in netwerken?"</p>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-gray-900">Intro:</strong> De noodzaak van ecosysteemdenken.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">5-20'</span><span><strong class="text-gray-900">Interactieve Poll:</strong> Live inventarisatie competenties.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">20-35'</span><span><strong class="text-gray-900">Info-Burst:</strong> 'Open Strategy' & 'Circular Business Model' framework.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">35-55'</span><span><strong class="text-gray-900">AI in Actie:</strong> Live synthese van input naar persona's & mindmap.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">55-60'</span><span><strong class="text-gray-900">Afsluiting:</strong> Concrete vertaalslag naar je curriculum.</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4>
-                            <div class="space-y-3">
-                                <p><strong>Inspiratie:</strong> <span class="rating" data-score="5"></span></p>
-                                <p><strong>Informatie:</strong> <span class="rating" data-score="4"></span></p>
-                                <p><strong>Interactie:</strong> <span class="rating" data-score="4"></span></p>
-                            </div>
-                            <button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal1')">Bekijk voorbereiding</button>
-                        </div>
-                    </div>
-                </div>`,
-					thema2: `
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Thema 2: De Mens-AI Teamleider</h3>
-                    <p class="font-semibold text-blue-600 mb-4">Focus: Operationele impact AI, nieuwe manieren van werken, en human-centric leiderschap.</p>
-                    <p class="mb-6">Deze workshop zoomt in op de veranderende rol van de manager. De vraag: "Hoe leiden we professionals op die effectief hybride teams van mensen en AI-agenten kunnen aansturen?"</p>
-                     <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-gray-900">Intro:</strong> De opkomst van de 'digitale teamgenoot'.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">5-20'</span><span><strong class="text-gray-900">Breakout:</strong> Bespreek de uitdagingen van mens-AI samenwerking.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">20-35'</span><span><strong class="text-gray-900">Info-Burst:</strong> Presentatie van het 'Agentic AI' framework.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">35-55'</span><span><strong class="text-gray-900">AI in Actie:</strong> We voeden de uitdagingen aan AI voor een actieplan.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">55-60'</span><span><strong class="text-gray-900">Afsluiting:</strong> Welke 'menselijke' vaardigheden worden crucialer?</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4>
-                            <div class="space-y-3">
-                                <p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p>
-                                <p><strong>Informatie:</strong> <span class="rating" data-score="4"></span></p>
-                                <p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p>
-                            </div>
-                            <button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal2')">Bekijk voorbereiding</button>
-                        </div>
-                    </div>
-                </div>`,
-					thema3: `
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Thema 3: De Toekomst-Verkenner</h3>
-                    <p class="font-semibold text-blue-600 mb-4">Focus: Dynamische capabilities, trend-sensing en agile strategie.</p>
-                    <p class="mb-6">Deze workshop daagt je uit om vooruit te kijken. De vraag: "Hoe trainen we studenten om proactief te navigeren in een onzekere toekomst?"</p>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-gray-900">Intro:</strong> Het belang van 'dynamic capabilities'.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">5-25'</span><span><strong class="text-gray-900">Spel:</strong> 'Trend-Sensing' met key-trends uit de praktijk.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">25-35'</span><span><strong class="text-gray-900">Info-Burst:</strong> Koppeling spel aan 'Sensing & Seizing'.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">35-55'</span><span><strong class="text-gray-900">AI in Actie:</strong> AI genereert toekomstscenario o.b.v. de top-trend.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">55-60'</span><span><strong class="text-gray-900">Afsluiting:</strong> Hoe wordt 'trend-watching' deel van jouw lessen?</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4>
-                            <div class="space-y-3">
-                                <p><strong>Inspiratie:</strong> <span class="rating" data-score="5"></span></p>
-                                <p><strong>Informatie:</strong> <span class="rating" data-score="3"></span></p>
-                                <p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p>
-                            </div>
-                            <button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal3')">Bekijk voorbereiding</button>
-                        </div>
-                    </div>
-                </div>`,
-					thema4: `
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Thema 4: De Ethische Navigator</h3>
-                    <p class="font-semibold text-blue-600 mb-4">Focus: Moreel kompas, verantwoord ondernemen en de 'dark side' van technologie.</p>
-                    <p class="mb-6">De vraag: "Hoe ontwikkelen we het morele kompas van onze studenten zodat ze verantwoorde beslissingen nemen in een complexe, digitale wereld?"</p>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-gray-900">Intro:</strong> Casus: een ethisch dilemma uit de praktijk.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">5-25'</span><span><strong class="text-gray-900">Dilemma Discussie:</strong> In groepen een ethisch dilemma analyseren.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">25-35'</span><span><strong class="text-gray-900">Info-Burst:</strong> Framework voor ethische besluitvorming.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">35-55'</span><span><strong class="text-gray-900">AI als Sparringpartner:</strong> Laat AI de ethische argumenten challengen.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">55-60'</span><span><strong class="text-gray-900">Afsluiting:</strong> Hoe veranker je ethiek in je onderwijs?</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4>
-                            <div class="space-y-3">
-                                <p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p>
-                                <p><strong>Informatie:</strong> <span class="rating" data-score="5"></span></p>
-                                <p><strong>Interactie:</strong> <span class="rating" data-score="5"></span></p>
-                            </div>
-                            <button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal4')">Bekijk voorbereiding</button>
-                        </div>
-                    </div>
-                </div>`,
-					thema5: `
-                 <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Thema 5: De Transformatie-Driver</h3>
-                    <p class="font-semibold text-blue-600 mb-4">Focus: Verandermanagement, implementatiekracht en het bouwen van 'dynamic capabilities'.</p>
-                    <p class="mb-6">Een visie is mooi, maar hoe realiseer je die? De vraag: "Hoe leiden we doeners op die digitale transformatie in de praktijk kunnen trekken en borgen?"</p>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Programma (60 min)</h4>
-                            <ul class="space-y-3">
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">0-10'</span><span><strong class="text-gray-900">Intro:</strong> De 'knowing-doing gap' bij digitale transformatie.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">10-30'</span><span><strong class="text-gray-900">Praktijkcase:</strong> Analyseer een mini-case over een vastgelopen transformatie.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">30-40'</span><span><strong class="text-gray-900">Info-Burst:</strong> Het 'Sensing, Seizing, Transforming' model als actiekader.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">40-55'</span><span><strong class="text-gray-900">AI als Co-piloot:</strong> Genereer een interventieplan voor de case.</span></li>
-                                <li class="flex items-start"><span class="text-blue-500 font-bold w-16 shrink-0">55-60'</span><span><strong class="text-gray-900">Afsluiting:</strong> Welke projecten kun je morgen starten met studenten?</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold mb-3 border-b pb-2">Jouw Scores</h4>
-                            <div class="space-y-3">
-                                <p><strong>Inspiratie:</strong> <span class="rating" data-score="4"></span></p>
-                                <p><strong>Informatie:</strong> <span class="rating" data-score="5"></span></p>
-                                <p><strong>Interactie:</strong> <span class="rating" data-score="4"></span></p>
-                            </div>
-                            <button class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal5')">Bekijk voorbereiding</button>
-                        </div>
-                    </div>
-                </div>`,
-				};
-
 				function updateSliderPosition(activeTab) {
 					if (!activeTab || !tabSlider) return;
 					const nav = activeTab.parentElement;
@@ -991,25 +1059,21 @@
 					tabSlider.style.width = `${activeTabRect.width}px`;
 					tabSlider.style.left = `${activeTabRect.left - navRect.left}px`;
 				}
-
 				function loadThemeContent(themeId) {
 					const content =
 						themeContents[themeId] || "<div>Content niet gevonden.</div>";
 					tabContentContainer.innerHTML = `<div id="${themeId}" class="tab-content-active">${content}</div>`;
 					initRatingsForContainer(tabContentContainer);
 				}
-
 				tabs.forEach((tab) => {
 					tab.addEventListener("click", () => {
 						const targetId = tab.getAttribute("data-target");
 						loadThemeContent(targetId);
-
 						tabs.forEach((item) => item.classList.remove("tab-active"));
 						tab.classList.add("tab-active");
 						updateSliderPosition(tab);
 					});
 				});
-
 				function initRatingsForContainer(container) {
 					container.querySelectorAll(".rating").forEach((rating) => {
 						const score = parseInt(rating.getAttribute("data-score"), 10);
@@ -1024,7 +1088,6 @@
 							.join("");
 					});
 				}
-
 				const scrollElements = document.querySelectorAll(".animate-on-scroll");
 				const observer = new IntersectionObserver(
 					(entries) => {
@@ -1038,7 +1101,6 @@
 					{ threshold: 0.1 }
 				);
 				scrollElements.forEach((el) => observer.observe(el));
-
 				const initialActiveTab = document.querySelector(
 					".tab-button.tab-active"
 				);
