@@ -1,865 +1,808 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Workshop: Wie is de bedrijfskundige van morgen?</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg-color: #f0fdfa; /* Light mint/aqua */
-        --text-color: #0f766e; /* Dark Teal */
-        --primary-color: #0d9488; /* Teal */
-        --accent-color: #f472b6; /* Pink */
-        --highlight-color: #fbbf24; /* Amber/Yellow */
-        --card-bg-color: #ffffff;
-        --shadow-color: rgba(13, 148, 136, 0.1);
-      }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Workshop: Wie is de bedrijfskundige van morgen?</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg-color: #f0fdfa; /* Light mint/aqua */
+				--text-color: #0f766e; /* Dark Teal */
+				--primary-color: #0d9488; /* Teal */
+				--accent-color: #f472b6; /* Pink */
+				--highlight-color: #fbbf24; /* Amber/Yellow */
+				--card-bg-color: #ffffff;
+				--shadow-color: rgba(13, 148, 136, 0.1);
+			}
 
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: var(--bg-color);
-        color: #475569; /* Slate */
-        overflow-x: hidden;
-      }
+			body {
+				font-family: "Poppins", sans-serif;
+				background-color: var(--bg-color);
+				color: #475569; /* Slate */
+				overflow-x: hidden;
+			}
 
-      .animate-on-load {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeInUp 0.8s ease-out forwards;
-      }
-      .animate-on-load.delay-1 {
-        animation-delay: 0.2s;
-      }
+			.animate-on-load {
+				opacity: 0;
+				transform: translateY(30px);
+				animation: fadeInUp 0.8s ease-out forwards;
+			}
+			.animate-on-load.delay-1 {
+				animation-delay: 0.2s;
+			}
 
-      .animate-on-scroll {
-        opacity: 0;
-        transform: translateY(40px);
-        transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-      }
-      .animate-on-scroll.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+			.animate-on-scroll {
+				opacity: 0;
+				transform: translateY(40px);
+				transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+			}
+			.animate-on-scroll.is-visible {
+				opacity: 1;
+				transform: translateY(0);
+			}
 
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+			@keyframes fadeInUp {
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
 
-      /* Timeline Styles */
-      .timeline-container {
-        display: flex;
-        align-items: flex-start;
-        overflow-x: auto;
-        padding-bottom: 2rem;
-        scrollbar-width: thin;
-        scrollbar-color: var(--accent-color) #fce7f3;
-      }
-      .timeline-container::-webkit-scrollbar {
-        height: 8px;
-      }
-      .timeline-container::-webkit-scrollbar-track {
-        background: #fce7f3; /* Light pink */
-        border-radius: 10px;
-      }
-      .timeline-container::-webkit-scrollbar-thumb {
-        background-color: var(--accent-color);
-        border-radius: 10px;
-      }
+			/* Timeline Styles */
+			.timeline-container {
+				display: flex;
+				align-items: flex-start;
+				overflow-x: auto;
+				padding-bottom: 2rem;
+				scrollbar-width: thin;
+				scrollbar-color: var(--accent-color) #fce7f3;
+			}
+			.timeline-container::-webkit-scrollbar {
+				height: 8px;
+			}
+			.timeline-container::-webkit-scrollbar-track {
+				background: #fce7f3; /* Light pink */
+				border-radius: 10px;
+			}
+			.timeline-container::-webkit-scrollbar-thumb {
+				background-color: var(--accent-color);
+				border-radius: 10px;
+			}
 
-      .timeline-item {
-        flex: 0 0 280px;
-        position: relative;
-        padding: 1.5rem 0;
-        padding-top: 3rem;
-      }
-      .timeline-item:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        left: 100%;
-        top: 2rem;
-        height: 2px;
-        width: 100%;
-        background-image: linear-gradient(
-          to right,
-          #e2e8f0 50%,
-          transparent 50%
-        );
-        background-size: 10px 2px;
-        transform: translateY(1.25rem);
-        margin-left: -140px;
-      }
-      .timeline-dot {
-        position: absolute;
-        top: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50px;
-        height: 50px;
-        background-color: var(--card-bg-color);
-        border-radius: 9999px;
-        border: 2px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        color: var(--primary-color);
-        box-shadow: 0 4px 10px -2px var(--shadow-color),
-          0 2px 4px -2px var(--shadow-color);
-        z-index: 10;
-      }
+			.timeline-item {
+				flex: 0 0 280px;
+				position: relative;
+				padding: 1.5rem 0;
+				padding-top: 3rem;
+			}
+			.timeline-item:not(:last-child)::after {
+				content: "";
+				position: absolute;
+				left: 100%;
+				top: 2rem;
+				height: 2px;
+				width: 100%;
+				background-image: linear-gradient(
+					to right,
+					#e2e8f0 50%,
+					transparent 50%
+				);
+				background-size: 10px 2px;
+				transform: translateY(1.25rem);
+				margin-left: -140px;
+			}
+			.timeline-dot {
+				position: absolute;
+				top: 2rem;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 50px;
+				height: 50px;
+				background-color: var(--card-bg-color);
+				border-radius: 9999px;
+				border: 2px solid #e2e8f0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 600;
+				color: var(--primary-color);
+				box-shadow: 0 4px 10px -2px var(--shadow-color),
+					0 2px 4px -2px var(--shadow-color);
+				z-index: 10;
+			}
 
-      /* Form & Tab Styles */
-      .tab-button-container {
-        position: relative;
-      }
-      .tab-slider {
-        position: absolute;
-        bottom: -2px;
-        height: 3px;
-        background-color: var(--primary-color);
-        border-radius: 9999px;
-        transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-          width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      }
-      .tab-button {
-        border-bottom: 2px solid transparent;
-        color: #64748b; /* Slate */
-        transition: color 0.3s ease;
-        font-weight: 500;
-      }
-      .tab-button.tab-active {
-        color: var(--primary-color);
-        font-weight: 700;
-      }
-      .tab-button:not(.tab-active):hover {
-        color: var(--primary-color);
-      }
-      .tab-content-active {
-        animation: fadeInContent 0.5s ease;
-      }
-      @keyframes fadeInContent {
-        from {
-          opacity: 0.5;
-        }
-        to {
-          opacity: 1;
-        }
-      }
+			/* Form & Tab Styles */
+			.tab-button-container {
+				position: relative;
+			}
+			.tab-slider {
+				position: absolute;
+				bottom: -2px;
+				height: 3px;
+				background-color: var(--primary-color);
+				border-radius: 9999px;
+				transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+					width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+			}
+			.tab-button {
+				border-bottom: 2px solid transparent;
+				color: #64748b; /* Slate */
+				transition: color 0.3s ease;
+				font-weight: 500;
+			}
+			.tab-button.tab-active {
+				color: var(--primary-color);
+				font-weight: 700;
+			}
+			.tab-button:not(.tab-active):hover {
+				color: var(--primary-color);
+			}
+			.tab-content-active {
+				animation: fadeInContent 0.5s ease;
+			}
+			@keyframes fadeInContent {
+				from {
+					opacity: 0.5;
+				}
+				to {
+					opacity: 1;
+				}
+			}
 
-      /* Modal Styles */
-      .modal-backdrop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 50;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-      }
-      .modal-backdrop.active {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      .modal-content {
-        transform: scale(0.95) translateY(20px);
-        opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-      }
-      .modal-backdrop.active .modal-content {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
+			/* Modal Styles */
+			.modal-backdrop {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.6);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 50;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
+			}
+			.modal-backdrop.active {
+				opacity: 1;
+				pointer-events: auto;
+			}
+			.modal-content {
+				transform: scale(0.95) translateY(20px);
+				opacity: 0;
+				transition: transform 0.3s ease, opacity 0.3s ease;
+			}
+			.modal-backdrop.active .modal-content {
+				transform: scale(1) translateY(0);
+				opacity: 1;
+			}
 
-      /* Timer Styles */
-      #workshop-timer {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        width: 200px;
-        height: 200px;
-        background-color: var(--card-bg-color);
-        border-radius: 9999px;
-        box-shadow: 0 10px 25px -5px var(--shadow-color),
-          0 8px 10px -6px var(--shadow-color);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 40;
-        transition: transform 0.3s ease;
-      }
-      #workshop-timer:hover {
-        transform: scale(1.05);
-      }
-      #timer-progress-circle {
-        transform: rotate(-90deg); /* Start from the top */
-      }
-    </style>
-  </head>
-  <body>
-    <header
-      class="bg-white shadow-md bg-gradient-to-r from-teal-50 to-amber-50"
-    >
-      <div class="container mx-auto px-6 py-16 text-center">
-        <h1
-          class="text-4xl md:text-5xl font-bold text-teal-800 leading-tight animate-on-load"
-        >
-          Workshop: wie is de bedrijfskundige van morgen?
-        </h1>
-        <p
-          class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto animate-on-load delay-1"
-        >
-          Een visie op de toekomst van ons vakgebied. Verken hieronder de
-          thema's, kies je favorieten en bereid je voor op een interactieve
-          sessie.
-        </p>
-      </div>
-    </header>
+			/* Timer Styles */
+			#workshop-timer {
+				position: fixed;
+				bottom: 2rem;
+				right: 2rem;
+				width: 200px;
+				height: 200px;
+				background-color: var(--card-bg-color);
+				border-radius: 9999px;
+				box-shadow: 0 10px 25px -5px var(--shadow-color),
+					0 8px 10px -6px var(--shadow-color);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				z-index: 40;
+				transition: transform 0.3s ease;
+			}
+			#workshop-timer:hover {
+				transform: scale(1.05);
+			}
+			#timer-progress-circle {
+				transform: rotate(-90deg); /* Start from the top */
+			}
+		</style>
+	</head>
+	<body>
+		<header
+			class="bg-white shadow-md bg-gradient-to-r from-teal-50 to-amber-50"
+		>
+			<div class="container mx-auto px-6 py-16 text-center">
+				<h1
+					class="text-4xl md:text-5xl font-bold text-teal-800 leading-tight animate-on-load"
+				>
+					Workshop: wie is de bedrijfskundige van morgen?
+				</h1>
+				<p
+					class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto animate-on-load delay-1"
+				>
+					Een visie op de toekomst van ons vakgebied. Verken hieronder de
+					thema's, kies je favorieten en bereid je voor op een interactieve
+					sessie.
+				</p>
+			</div>
+		</header>
 
-    <main class="container mx-auto px-6 py-16">
-      <section class="mb-20 animate-on-scroll">
-        <h2 class="text-3xl font-bold text-center mb-4 text-teal-800">
-          De evolutie van de bedrijfskundige
-        </h2>
-        <p class="text-center text-slate-600 mb-12 max-w-4xl mx-auto">
-          Ons vakgebied is continu in beweging. Deze tijdlijn toont de reis van
-          efficiëntie-expert naar de rol die wij vandaag de dag voor ons zien.
-          Wat wordt de volgende stap?
-        </p>
-        <div class="timeline-container">
-          <div class="timeline-item">
-            <div class="timeline-dot">1.0</div>
-            <div class="bg-white p-6 rounded-lg shadow-lg h-full">
-              <h3 class="font-bold text-lg mb-1 text-teal-700">
-                Efficiëntie & management
-              </h3>
-              <p class="text-sm text-slate-500 mb-2">'20 - '50</p>
-              <p class="text-sm text-slate-600 mb-4">
-                Focus op standaardisatie, productieoptimalisatie en hiërarchie.
-                Scientific Management als leidraad.
-              </p>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Scientific Management</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot">2.0</div>
-            <div class="bg-white p-6 rounded-lg shadow-lg h-full">
-              <h3 class="font-bold text-lg mb-1 text-teal-700">
-                Mens & organisatie
-              </h3>
-              <p class="text-sm text-slate-500 mb-2">'50 - '70</p>
-              <p class="text-sm text-slate-600 mb-4">
-                Aandacht verschuift naar motivatie, groepsdynamica en de sociale
-                aspecten van werk. De mens wordt centraal.
-              </p>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Human Relations</span
-                >
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Motivatie</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot">3.0</div>
-            <div class="bg-white p-6 rounded-lg shadow-lg h-full">
-              <h3 class="font-bold text-lg mb-1 text-teal-700">
-                IT & strategie
-              </h3>
-              <p class="text-sm text-slate-500 mb-2">'80 - '90</p>
-              <p class="text-sm text-slate-600 mb-4">
-                Opkomst van IT als strategische enabler. Focus op
-                concurrentievoordeel en beginnende globalisering.
-              </p>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Strategie</span
-                >
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >IT</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot">4.0</div>
-            <div class="bg-white p-6 rounded-lg shadow-lg h-full">
-              <h3 class="font-bold text-lg mb-1 text-teal-700">
-                Digitale transformatie
-              </h3>
-              <p class="text-sm text-slate-500 mb-2">'00 - heden</p>
-              <p class="text-sm text-slate-600 mb-4">
-                Integratie van digitalisering & data. Wendbaarheid en
-                klantgerichtheid staan centraal (LOP 2024).
-              </p>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Agile</span
-                >
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Data</span
-                >
-                <span
-                  class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
-                  >Transitie</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot bg-teal-600 text-white">?</div>
-            <div
-              class="bg-teal-50 border-2 border-dashed border-teal-200 p-6 rounded-lg shadow-md h-full flex flex-col items-center justify-center text-center"
-            >
-              <h3 class="font-bold text-lg mb-1 text-teal-800">
-                Bedrijfskundige 5.0
-              </h3>
-              <p class="text-sm text-teal-700">
-                Wat wordt onze volgende stap? Dit definiëren we samen in de
-                workshop!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+		<main class="container mx-auto px-6 py-16">
+			<section class="mb-20 animate-on-scroll">
+				<h2 class="text-3xl font-bold text-center mb-4 text-teal-800">
+					De evolutie van de bedrijfskundige
+				</h2>
+				<p class="text-center text-slate-600 mb-12 max-w-4xl mx-auto">
+					Ons vakgebied is continu in beweging. Deze tijdlijn toont de reis van
+					efficiëntie-expert naar de rol die wij vandaag de dag voor ons zien.
+					Wat wordt de volgende stap?
+				</p>
+				<div class="timeline-container">
+					<div class="timeline-item">
+						<div class="timeline-dot">1.0</div>
+						<div class="bg-white p-6 rounded-lg shadow-lg h-full">
+							<h3 class="font-bold text-lg mb-1 text-teal-700">
+								Efficiëntie & management
+							</h3>
+							<p class="text-sm text-slate-500 mb-2">'20 - '50</p>
+							<p class="text-sm text-slate-600 mb-4">
+								Focus op standaardisatie, productieoptimalisatie en hiërarchie.
+								Scientific Management als leidraad.
+							</p>
+							<div class="flex flex-wrap gap-2">
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Scientific Management</span
+								>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot">2.0</div>
+						<div class="bg-white p-6 rounded-lg shadow-lg h-full">
+							<h3 class="font-bold text-lg mb-1 text-teal-700">
+								Mens & organisatie
+							</h3>
+							<p class="text-sm text-slate-500 mb-2">'50 - '70</p>
+							<p class="text-sm text-slate-600 mb-4">
+								Aandacht verschuift naar motivatie, groepsdynamica en de sociale
+								aspecten van werk. De mens wordt centraal.
+							</p>
+							<div class="flex flex-wrap gap-2">
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Human Relations</span
+								>
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Motivatie</span
+								>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot">3.0</div>
+						<div class="bg-white p-6 rounded-lg shadow-lg h-full">
+							<h3 class="font-bold text-lg mb-1 text-teal-700">
+								IT & strategie
+							</h3>
+							<p class="text-sm text-slate-500 mb-2">'80 - '90</p>
+							<p class="text-sm text-slate-600 mb-4">
+								Opkomst van IT als strategische enabler. Focus op
+								concurrentievoordeel en beginnende globalisering.
+							</p>
+							<div class="flex flex-wrap gap-2">
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Strategie</span
+								>
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>IT</span
+								>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot">4.0</div>
+						<div class="bg-white p-6 rounded-lg shadow-lg h-full">
+							<h3 class="font-bold text-lg mb-1 text-teal-700">
+								Digitale transformatie
+							</h3>
+							<p class="text-sm text-slate-500 mb-2">'00 - heden</p>
+							<p class="text-sm text-slate-600 mb-4">
+								Integratie van digitalisering & data. Wendbaarheid en
+								klantgerichtheid staan centraal (LOP 2024).
+							</p>
+							<div class="flex flex-wrap gap-2">
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Agile</span
+								>
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Data</span
+								>
+								<span
+									class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full"
+									>Transitie</span
+								>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item">
+						<div class="timeline-dot bg-teal-600 text-white">?</div>
+						<div
+							class="bg-teal-50 border-2 border-dashed border-teal-200 p-6 rounded-lg shadow-md h-full flex flex-col items-center justify-center text-center"
+						>
+							<h3 class="font-bold text-lg mb-1 text-teal-800">
+								Bedrijfskundige 5.0
+							</h3>
+							<p class="text-sm text-teal-700">
+								Wat wordt onze volgende stap? Dit definiëren we samen in de
+								workshop!
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      <section class="animate-on-scroll">
-        <h2 class="text-3xl font-bold text-center mb-2 text-teal-800">
-          Verken de thema's & kies je voorkeur
-        </h2>
-        <p class="text-center text-slate-600 mb-10 max-w-4xl mx-auto">
-          Hieronder vind je vijf kernthema's. Verken de programma's en de
-          voorbereidende opdrachten. Geef daarna via het
-          <a
-            href="#voorkeur-form"
-            class="text-pink-600 hover:underline font-medium"
-            >formulier</a
-          >
-          je top 3 door.
-        </p>
+			<section class="animate-on-scroll">
+				<h2 class="text-3xl font-bold text-center mb-2 text-teal-800">
+					Verken de thema's & kies je voorkeur
+				</h2>
+				<p class="text-center text-slate-600 mb-10 max-w-4xl mx-auto">
+					Hieronder vind je vijf kernthema's. Verken de programma's en de
+					voorbereidende opdrachten. Welk thema spreekt jouw het meeste aan?
+					Geef je voorkeur aan via het
+					<a
+						href="#voorkeur-form"
+						class="text-pink-600 hover:underline font-medium"
+						>formulier</a
+					>
+					. Wij zullen dit gebruiken om de teams te vormen, die tijdens de
+					sessie de thema's verder zullen uitdiepen.
+				</p>
 
-        <div class="tab-button-container mb-8">
-          <nav
-            class="flex flex-wrap justify-center gap-x-4 md:gap-x-6"
-            aria-label="Tabs"
-          >
-            <button
-              class="tab-button tab-active py-2 px-3"
-              data-target="thema1"
-            >
-              Ecosysteem-architect
-            </button>
-            <button
-              class="tab-button py-2 px-3"
-              data-target="thema2"
-            >
-              Mens-AI teamleider
-            </button>
-            <button
-              class="tab-button py-2 px-3"
-              data-target="thema3"
-            >
-              Toekomst-verkenner
-            </button>
-            <button
-              class="tab-button py-2 px-3"
-              data-target="thema4"
-            >
-              Ethische navigator
-            </button>
-            <button
-              class="tab-button py-2 px-3"
-              data-target="thema5"
-            >
-              Transformatie-driver
-            </button>
-          </nav>
-          <div class="tab-slider"></div>
-        </div>
+				<div class="tab-button-container mb-8">
+					<nav
+						class="flex flex-wrap justify-center gap-x-4 md:gap-x-6"
+						aria-label="Tabs"
+					>
+						<button
+							class="tab-button tab-active py-2 px-3"
+							data-target="thema1"
+						>
+							Ecosysteem-architect
+						</button>
+						<button class="tab-button py-2 px-3" data-target="thema2">
+							Mens-AI teamleider
+						</button>
+						<button class="tab-button py-2 px-3" data-target="thema3">
+							Toekomst-verkenner
+						</button>
+						<button class="tab-button py-2 px-3" data-target="thema4">
+							Ethische navigator
+						</button>
+						<button class="tab-button py-2 px-3" data-target="thema5">
+							Transformatie-driver
+						</button>
+					</nav>
+					<div class="tab-slider"></div>
+				</div>
 
-        <div class="relative min-h-[350px]"></div>
-      </section>
+				<div class="relative min-h-[350px]"></div>
+			</section>
 
-      <section class="mt-16 animate-on-scroll">
-        <div class="bg-white p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
-          <h2 class="text-3xl font-bold text-center mb-6 text-teal-800">
-            Geef je thema voorkeuren door
-          </h2>
-          <form id="voorkeur-form">
-            <div class="mb-6">
-              <label
-                for="voornaam"
-                class="block text-sm font-medium text-slate-700 mb-1"
-                >Voornaam</label
-              ><input
-                type="text"
-                id="voornaam"
-                name="voornaam"
-                required
-                class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
-              />
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div>
-                <label
-                  for="voorkeur1"
-                  class="block text-sm font-medium text-slate-700 mb-1"
-                  >Voorkeur 1</label
-                ><select
-                  id="voorkeur1"
-                  name="voorkeur1"
-                  required
-                  class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
-                >
-                  <option
-                    value=""
-                    disabled
-                    selected
-                  >
-                    Kies een thema...
-                  </option>
-                  <option value="Ecosysteem-Architect">
-                    Ecosysteem-architect
-                  </option>
-                  <option value="Mens-AI Teamleider">Mens-AI teamleider</option>
-                  <option value="Toekomst-Verkenner">Toekomst-verkenner</option>
-                  <option value="Ethische Navigator">Ethische navigator</option>
-                  <option value="Transformatie-Driver">
-                    Transformatie-driver
-                  </option>
-                </select>
-              </div>
-              <div>
-                <label
-                  for="voorkeur2"
-                  class="block text-sm font-medium text-slate-700 mb-1"
-                  >Voorkeur 2</label
-                ><select
-                  id="voorkeur2"
-                  name="voorkeur2"
-                  required
-                  class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
-                >
-                  <option
-                    value=""
-                    disabled
-                    selected
-                  >
-                    Kies een thema...
-                  </option>
-                  <option value="Ecosysteem-Architect">
-                    Ecosysteem-architect
-                  </option>
-                  <option value="Mens-AI Teamleider">Mens-AI teamleider</option>
-                  <option value="Toekomst-Verkenner">Toekomst-verkenner</option>
-                  <option value="Ethische Navigator">Ethische navigator</option>
-                  <option value="Transformatie-Driver">
-                    Transformatie-driver
-                  </option>
-                </select>
-              </div>
-              <div>
-                <label
-                  for="voorkeur3"
-                  class="block text-sm font-medium text-slate-700 mb-1"
-                  >Voorkeur 3</label
-                ><select
-                  id="voorkeur3"
-                  name="voorkeur3"
-                  required
-                  class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
-                >
-                  <option
-                    value=""
-                    disabled
-                    selected
-                  >
-                    Kies een thema...
-                  </option>
-                  <option value="Ecosysteem-Architect">
-                    Ecosysteem-architect
-                  </option>
-                  <option value="Mens-AI Teamleider">Mens-AI teamleider</option>
-                  <option value="Toekomst-Verkenner">Toekomst-verkenner</option>
-                  <option value="Ethische Navigator">Ethische navigator</option>
-                  <option value="Transformatie-Driver">
-                    Transformatie-driver
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="text-center mb-6">
-              <p class="text-slate-600 mb-3">
-                Nadat je een thema hebt gekozen, reflecteer dan op de volgende
-                vragen binnen de context van dat thema:
-              </p>
-              <ol
-                class="list-decimal list-inside inline-block text-left space-y-1 text-slate-600"
-              >
-                <li>Welk beeld heb je bij deze rol?</li>
-                <li>Welke uitdagingen zie je in de ontwikkeling?</li>
-                <li>Wat heb jij als docent nodig?</li>
-              </ol>
-            </div>
-            <div class="text-center">
-              <button
-                type="submit"
-                class="bg-pink-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-pink-600 transition-all duration-300 transform hover:scale-105"
-              >
-                Verstuur mijn voorkeur
-              </button>
-            </div>
-          </form>
-          <div
-            id="form-feedback"
-            class="mt-6 text-center"
-          ></div>
-        </div>
-      </section>
-    </main>
+			<section class="mt-16 animate-on-scroll">
+				<div class="bg-white p-8 rounded-lg shadow-xl max-w-4xl mx-auto">
+					<h2 class="text-3xl font-bold text-center mb-6 text-teal-800">
+						Geef je thema voorkeuren door
+					</h2>
+					<form id="voorkeur-form">
+						<div class="mb-6">
+							<label
+								for="voornaam"
+								class="block text-sm font-medium text-slate-700 mb-1"
+								>Voornaam</label
+							><input
+								type="text"
+								id="voornaam"
+								name="voornaam"
+								required
+								class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
+							/>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+							<div>
+								<label
+									for="voorkeur1"
+									class="block text-sm font-medium text-slate-700 mb-1"
+									>Voorkeur 1</label
+								><select
+									id="voorkeur1"
+									name="voorkeur1"
+									required
+									class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
+								>
+									<option value="" disabled selected>Kies een thema...</option>
+									<option value="Ecosysteem-Architect">
+										Ecosysteem-architect
+									</option>
+									<option value="Mens-AI Teamleider">Mens-AI teamleider</option>
+									<option value="Toekomst-Verkenner">Toekomst-verkenner</option>
+									<option value="Ethische Navigator">Ethische navigator</option>
+									<option value="Transformatie-Driver">
+										Transformatie-driver
+									</option>
+								</select>
+							</div>
+							<div>
+								<label
+									for="voorkeur2"
+									class="block text-sm font-medium text-slate-700 mb-1"
+									>Voorkeur 2</label
+								><select
+									id="voorkeur2"
+									name="voorkeur2"
+									required
+									class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
+								>
+									<option value="" disabled selected>Kies een thema...</option>
+									<option value="Ecosysteem-Architect">
+										Ecosysteem-architect
+									</option>
+									<option value="Mens-AI Teamleider">Mens-AI teamleider</option>
+									<option value="Toekomst-Verkenner">Toekomst-verkenner</option>
+									<option value="Ethische Navigator">Ethische navigator</option>
+									<option value="Transformatie-Driver">
+										Transformatie-driver
+									</option>
+								</select>
+							</div>
+							<div>
+								<label
+									for="voorkeur3"
+									class="block text-sm font-medium text-slate-700 mb-1"
+									>Voorkeur 3</label
+								><select
+									id="voorkeur3"
+									name="voorkeur3"
+									required
+									class="w-full p-3 border border-slate-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"
+								>
+									<option value="" disabled selected>Kies een thema...</option>
+									<option value="Ecosysteem-Architect">
+										Ecosysteem-architect
+									</option>
+									<option value="Mens-AI Teamleider">Mens-AI teamleider</option>
+									<option value="Toekomst-Verkenner">Toekomst-verkenner</option>
+									<option value="Ethische Navigator">Ethische navigator</option>
+									<option value="Transformatie-Driver">
+										Transformatie-driver
+									</option>
+								</select>
+							</div>
+						</div>
+						<div class="text-center mb-6">
+							<p class="text-slate-600 mb-3">
+								Nadat je een thema hebt gekozen, voer je de voorbereidende
+								opdracht uit die bij het thema van je eerste voorkeur hoort en
+								reflecteer je op de volgende vragen binnen de context van dat
+								thema:
+							</p>
+							<ol
+								class="list-decimal list-inside inline-block text-left space-y-1 text-slate-600"
+							>
+								<li>Welk beeld heb je bij deze rol?</li>
+								<li>Welke uitdagingen zie je in de ontwikkeling?</li>
+								<li>Wat heb jij als docent nodig?</li>
+							</ol>
+						</div>
+						<div class="text-center">
+							<button
+								type="submit"
+								class="bg-pink-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-pink-600 transition-all duration-300 transform hover:scale-105"
+							>
+								Verstuur mijn voorkeur
+							</button>
+						</div>
+					</form>
+					<div id="form-feedback" class="mt-6 text-center"></div>
+				</div>
+			</section>
+		</main>
 
-    <div
-      id="modal1"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-800">
-          Thema 1: De ecosysteem-architect
-        </h3>
-        <p class="mb-4 text-slate-600">
-          Ideaal voor wie de strategische kant van Bedrijfskunde 5.0 wil
-          verkennen, met nadruk op systeemdenken en waardecreatie over de
-          grenzen van organisaties heen.
-        </p>
-        <h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
-          Voorbereiding & huiswerk
-        </h4>
-        <p class="mb-4 text-slate-600">
-          Om het meeste uit dit thema te halen, vragen we je het volgende voor
-          te bereiden:
-        </p>
-        <ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
-          <li>
-            <strong>Lees:</strong>
-            <a
-              id="article-link-1"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Systems-based approach to business management</a
-            >
-          </li>
-          <li>
-            <strong>Bekijk:</strong>
-            <a
-              id="video-link-1"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Adopt open strategy to fuel innovation</a
-            >
-          </li>
-          <li>
-            <strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-            study van een succesvol business ecosysteem (bv. in tech, mobiliteit
-            of energie) en neem dit mee naar de sessie.
-          </li>
-        </ol>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
-          onclick="closeModal('modal1')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+		<div id="modal1" class="modal-backdrop">
+			<div
+				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-800">
+					Thema 1: De ecosysteem-architect
+				</h3>
+				<p class="mb-4 text-slate-600">
+					Ideaal voor wie de strategische kant van Bedrijfskunde 5.0 wil
+					verkennen, met nadruk op systeemdenken en waardecreatie over de
+					grenzen van organisaties heen.
+				</p>
+				<h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
+					Voorbereiding & huiswerk
+				</h4>
+				<p class="mb-4 text-slate-600">
+					Om het meeste uit dit thema te halen, vragen we je het volgende voor
+					te bereiden:
+				</p>
+				<ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
+					<li>
+						<strong>Lees:</strong>
+						<a
+							id="article-link-1"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Systems-based approach to business management</a
+						>
+					</li>
+					<li>
+						<strong>Bekijk:</strong>
+						<a
+							id="video-link-1"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Adopt open strategy to fuel innovation</a
+						>
+					</li>
+					<li>
+						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
+						study van een succesvol business ecosysteem (bv. in tech, mobiliteit
+						of energie) en neem dit mee naar de sessie.
+					</li>
+				</ol>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
+					onclick="closeModal('modal1')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div
-      id="modal2"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-800">
-          Thema 2: De mens-AI teamleider
-        </h3>
-        <p class="mb-4 text-slate-600">
-          Praktisch en gericht op de veranderende vaardigheden op de werkvloer.
-          Perfect voor wie de concrete impact van AI op leiderschap en
-          teammanagement wil begrijpen.
-        </p>
-        <h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
-          Voorbereiding & huiswerk
-        </h4>
-        <ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
-          <li>
-            <strong>Lees:</strong>
-            <a
-              id="article-link-2"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >HAI AI Index Report 2025</a
-            >
-          </li>
-          <li>
-            <strong>Bekijk:</strong>
-            <a
-              id="video-link-2"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Positive-sum automation & artificial intelligence</a
-            >
-          </li>
-          <li>
-            <strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-            study van een succesvolle implementatie van Agentic AI t.b.v.
-            operational excellence. Dit kan een video, artikel of andere bron
-            zijn die je inzichten biedt in de toepassing van AI in een zakelijke
-            context.
-          </li>
-        </ol>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
-          onclick="closeModal('modal2')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+		<div id="modal2" class="modal-backdrop">
+			<div
+				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-800">
+					Thema 2: De mens-AI teamleider
+				</h3>
+				<p class="mb-4 text-slate-600">
+					Praktisch en gericht op de veranderende vaardigheden op de werkvloer.
+					Perfect voor wie de concrete impact van AI op leiderschap en
+					teammanagement wil begrijpen.
+				</p>
+				<h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
+					Voorbereiding & huiswerk
+				</h4>
+				<ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
+					<li>
+						<strong>Lees:</strong>
+						<a
+							id="article-link-2"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>HAI AI Index Report 2025</a
+						>
+					</li>
+					<li>
+						<strong>Bekijk:</strong>
+						<a
+							id="video-link-2"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Positive-sum automation & artificial intelligence</a
+						>
+					</li>
+					<li>
+						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
+						study van een succesvolle implementatie van Agentic AI t.b.v.
+						operational excellence. Dit kan een video, artikel of andere bron
+						zijn die je inzichten biedt in de toepassing van AI in een zakelijke
+						context.
+					</li>
+				</ol>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
+					onclick="closeModal('modal2')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div
-      id="modal3"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-800">
-          Thema 3: De toekomst-verkenner
-        </h3>
-        <p class="mb-4 text-slate-600">
-          Creatief en gericht op het ontwikkelen van een 'foresight' mindset.
-          Ideaal voor wie studenten wil leren omgaan met onzekerheid en hen wil
-          trainen om proactief kansen te zien.
-        </p>
-        <h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
-          Voorbereiding & huiswerk
-        </h4>
-        <ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
-          <li>
-            <strong>Lees:</strong>
-            <a
-              id="article-link-3"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Bringing true strategic foresight back to business</a
-            >
-          </li>
-          <li>
-            <strong>Bekijk:</strong>
-            <a
-              id="video-link-3"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >The infinite game</a
-            >
-          </li>
-          <li>
-            <strong>Breng mee:</strong> Een trend of wildcard uit een recent,
-            gezaghebbend foresight-rapport (gepubliceerd in de afgelopen 12
-            maanden) met een uitleg waarom die relevant is voor de evolutie van
-            het vakgebied.
-          </li>
-        </ol>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
-          onclick="closeModal('modal3')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+		<div id="modal3" class="modal-backdrop">
+			<div
+				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-800">
+					Thema 3: De toekomst-verkenner
+				</h3>
+				<p class="mb-4 text-slate-600">
+					Creatief en gericht op het ontwikkelen van een 'foresight' mindset.
+					Ideaal voor wie studenten wil leren omgaan met onzekerheid en hen wil
+					trainen om proactief kansen te zien.
+				</p>
+				<h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
+					Voorbereiding & huiswerk
+				</h4>
+				<ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
+					<li>
+						<strong>Lees:</strong>
+						<a
+							id="article-link-3"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Bringing true strategic foresight back to business</a
+						>
+					</li>
+					<li>
+						<strong>Bekijk:</strong>
+						<a
+							id="video-link-3"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>The infinite game</a
+						>
+					</li>
+					<li>
+						<strong>Breng mee:</strong> Een trend of wildcard uit een recent,
+						gezaghebbend foresight-rapport (gepubliceerd in de afgelopen 12
+						maanden) met een uitleg waarom die relevant is voor de evolutie van
+						het vakgebied.
+					</li>
+				</ol>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
+					onclick="closeModal('modal3')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div
-      id="modal4"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-800">
-          Thema 4: De ethische navigator
-        </h3>
-        <p class="mb-4 text-slate-600">
-          Perfect als je de diepte in wilt gaan en het morele kompas van
-          studenten wilt aanscherpen. Zeer interactief en dwingt tot kritische
-          reflectie.
-        </p>
-        <h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
-          Voorbereiding & huiswerk
-        </h4>
-        <ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
-          <li>
-            <strong>Lees:</strong>
-            <a
-              id="article-link-4"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Sustainable by design</a
-            >
-          </li>
-          <li>
-            <strong>Bekijk:</strong>
-            <a
-              id="video-link-4"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Inspiring ethics: designing more moral leaders</a
-            >
-          </li>
-          <li>
-            <strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-            study (≤ 2 jaar oud) rond een ethisch dilemma, geanalyseerd met een
-            erkend ethisch raamwerk
-          </li>
-        </ol>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
-          onclick="closeModal('modal4')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+		<div id="modal4" class="modal-backdrop">
+			<div
+				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-800">
+					Thema 4: De ethische navigator
+				</h3>
+				<p class="mb-4 text-slate-600">
+					Perfect als je de diepte in wilt gaan en het morele kompas van
+					studenten wilt aanscherpen. Zeer interactief en dwingt tot kritische
+					reflectie.
+				</p>
+				<h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
+					Voorbereiding & huiswerk
+				</h4>
+				<ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
+					<li>
+						<strong>Lees:</strong>
+						<a
+							id="article-link-4"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Sustainable by design</a
+						>
+					</li>
+					<li>
+						<strong>Bekijk:</strong>
+						<a
+							id="video-link-4"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Inspiring ethics: designing more moral leaders</a
+						>
+					</li>
+					<li>
+						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
+						study (≤ 2 jaar oud) rond een ethisch dilemma, geanalyseerd met een
+						erkend ethisch raamwerk
+					</li>
+				</ol>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
+					onclick="closeModal('modal4')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div
-      id="modal5"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-800">
-          Thema 5: De transformatie-driver
-        </h3>
-        <p class="mb-4 text-slate-600">
-          Een hands-on, praktisch thema voor wie studenten wil toerusten met de
-          vaardigheden om verandering daadwerkelijk te realiseren en te borgen.
-        </p>
-        <h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
-          Voorbereiding & huiswerk
-        </h4>
-        <ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
-          <li>
-            <strong>Lees:</strong>
-            <a
-              id="article-link-5"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Building dynamic capabilities for digital transformation</a
-            >
-          </li>
-          <li>
-            <strong>Bekijk:</strong>
-            <a
-              id="video-link-5"
-              href="#"
-              target="_blank"
-              class="text-pink-600 hover:underline"
-              >Building a winning workplace culture</a
-            >
-          </li>
-          <li>
-            <strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
-            study over een mislukte of succesvolle organisatie-transformatie en
-            benoem de belangrijkste faal- c.q. succesfactoren.
-          </li>
-        </ol>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
-          onclick="closeModal('modal5')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+		<div id="modal5" class="modal-backdrop">
+			<div
+				class="modal-content bg-white w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-800">
+					Thema 5: De transformatie-driver
+				</h3>
+				<p class="mb-4 text-slate-600">
+					Een hands-on, praktisch thema voor wie studenten wil toerusten met de
+					vaardigheden om verandering daadwerkelijk te realiseren en te borgen.
+				</p>
+				<h4 class="font-semibold text-lg mt-6 mb-2 text-teal-700">
+					Voorbereiding & huiswerk
+				</h4>
+				<ol class="list-decimal list-inside space-y-3 mb-4 text-slate-700">
+					<li>
+						<strong>Lees:</strong>
+						<a
+							id="article-link-5"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Building dynamic capabilities for digital transformation</a
+						>
+					</li>
+					<li>
+						<strong>Bekijk:</strong>
+						<a
+							id="video-link-5"
+							href="#"
+							target="_blank"
+							class="text-pink-600 hover:underline"
+							>Building a winning workplace culture</a
+						>
+					</li>
+					<li>
+						<strong>Breng mee:</strong> Zoek een actuele (evidence-based) case
+						study over een mislukte of succesvolle organisatie-transformatie en
+						benoem de belangrijkste faal- c.q. succesfactoren.
+					</li>
+				</ol>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-3xl leading-none"
+					onclick="closeModal('modal5')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div
-      id="prompt-modal"
-      class="modal-backdrop"
-    >
-      <div
-        class="modal-content bg-slate-800 text-white w-11/12 md:max-w-3xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
-      >
-        <h3 class="text-2xl font-bold mb-4 text-teal-400">
-          AI Prompt Template: Persona Creatie
-        </h3>
-        <p class="mb-4 text-slate-300">
-          Kopieer deze volledige template en vul de gemarkeerde secties aan met
-          de input van jullie team. Plak de complete tekst vervolgens in de
-          AI-tool.
-        </p>
-        <div class="relative bg-slate-900 p-4 rounded-md">
-          <button
-            id="copy-prompt-btn"
-            class="absolute top-2 right-2 bg-teal-500 text-white px-3 py-1 rounded-md text-sm font-semibold hover:bg-teal-600"
-          >
-            Kopieer
-          </button>
-          <pre
-            id="prompt-text"
-            class="text-left text-sm whitespace-pre-wrap text-slate-200"
-          ><code>
+		<div id="prompt-modal" class="modal-backdrop">
+			<div
+				class="modal-content bg-slate-800 text-white w-11/12 md:max-w-3xl mx-auto rounded-lg shadow-xl p-8 relative max-h-[90vh] overflow-y-auto"
+			>
+				<h3 class="text-2xl font-bold mb-4 text-teal-400">
+					AI Prompt Template: Persona Creatie
+				</h3>
+				<p class="mb-4 text-slate-300">
+					Kopieer deze volledige template en vul de gemarkeerde secties aan met
+					de input van jullie team. Plak de complete tekst vervolgens in de
+					AI-tool.
+				</p>
+				<div class="relative bg-slate-900 p-4 rounded-md">
+					<button
+						id="copy-prompt-btn"
+						class="absolute top-2 right-2 bg-teal-500 text-white px-3 py-1 rounded-md text-sm font-semibold hover:bg-teal-600"
+					>
+						Kopieer
+					</button>
+					<pre
+						id="prompt-text"
+						class="text-left text-sm whitespace-pre-wrap text-slate-200"
+					><code>
 # ROL & DOEL
 Jij bent een expert in creative personal branding en een futurist, gespecialiseerd in het vormgeven van professionele identiteiten voor de wereld van morgen. Je begrijpt de nuances van LinkedIn en hoe je een overtuigend en toekomstgericht profiel opbouwt.
 Je taak is om een compleet en gedetailleerd LinkedIn-profiel te genereren voor de "Bedrijfskundige 5.0".
@@ -888,169 +831,160 @@ Creëer het LinkedIn-profiel volgens de onderstaande structuur. Wees creatief en
 10. **Prestaties**: Noem 1 prijs of award die de persona heeft gewonnen.
 11. **Interesses**: Noem 3 fictieve, invloedrijke 'thought leaders' of bedrijven die deze persona zou volgen.
 </code></pre>
-        </div>
-        <button
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-100 text-3xl leading-none"
-          onclick="closeModal('prompt-modal')"
-        >
-          ×
-        </button>
-      </div>
-    </div>
+				</div>
+				<button
+					class="absolute top-4 right-4 text-slate-400 hover:text-slate-100 text-3xl leading-none"
+					onclick="closeModal('prompt-modal')"
+				>
+					×
+				</button>
+			</div>
+		</div>
 
-    <div id="workshop-timer">
-      <div class="absolute w-full h-full">
-        <svg
-          class="w-full h-full"
-          viewBox="0 0 100 100"
-        >
-          <circle
-            class="text-teal-100"
-            stroke-width="8"
-            stroke="currentColor"
-            fill="transparent"
-            r="45"
-            cx="50"
-            cy="50"
-          />
-          <circle
-            id="timer-progress-circle"
-            class="text-teal-500"
-            stroke-width="8"
-            stroke-linecap="round"
-            stroke="currentColor"
-            fill="transparent"
-            r="45"
-            cx="50"
-            cy="50"
-            style="transition: stroke-dashoffset 1s linear"
-          />
-        </svg>
-      </div>
-      <div
-        id="timer-content"
-        class="text-center"
-      >
-        <div
-          id="timer-display"
-          class="text-4xl font-bold text-teal-800"
-        >
-          05:00
-        </div>
-        <p
-          id="timer-activity"
-          class="text-sm text-slate-500 max-w-[120px] leading-tight"
-        >
-          Intro & instructies
-        </p>
-      </div>
-      <div class="absolute bottom-3 flex space-x-2">
-        <button
-          id="timer-control-btn"
-          class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <button
-          id="timer-next-btn"
-          class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
-            />
-            <path
-              fill-rule="evenodd"
-              d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <button
-          id="timer-reset-btn"
-          class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm1 14a1 1 0 011-1h5.001a5.002 5.002 0 00-2.481-4.333 1 1 0 111.332-1.498A7.002 7.002 0 0114.999 13H15a1 1 0 010 2h-5a1 1 0 01-1-1v-5a1 1 0 012 0v2.101z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
+		<div id="workshop-timer">
+			<div class="absolute w-full h-full">
+				<svg class="w-full h-full" viewBox="0 0 100 100">
+					<circle
+						class="text-teal-100"
+						stroke-width="8"
+						stroke="currentColor"
+						fill="transparent"
+						r="45"
+						cx="50"
+						cy="50"
+					/>
+					<circle
+						id="timer-progress-circle"
+						class="text-teal-500"
+						stroke-width="8"
+						stroke-linecap="round"
+						stroke="currentColor"
+						fill="transparent"
+						r="45"
+						cx="50"
+						cy="50"
+						style="transition: stroke-dashoffset 1s linear"
+					/>
+				</svg>
+			</div>
+			<div id="timer-content" class="text-center">
+				<div id="timer-display" class="text-4xl font-bold text-teal-800">
+					05:00
+				</div>
+				<p
+					id="timer-activity"
+					class="text-sm text-slate-500 max-w-[120px] leading-tight"
+				>
+					Intro & instructies
+				</p>
+			</div>
+			<div class="absolute bottom-3 flex space-x-2">
+				<button
+					id="timer-control-btn"
+					class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+				<button
+					id="timer-next-btn"
+					class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+							clip-rule="evenodd"
+						/>
+						<path
+							fill-rule="evenodd"
+							d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+				<button
+					id="timer-reset-btn"
+					class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm1 14a1 1 0 011-1h5.001a5.002 5.002 0 00-2.481-4.333 1 1 0 111.332-1.498A7.002 7.002 0 0114.999 13H15a1 1 0 010 2h-5a1 1 0 01-1-1v-5a1 1 0 012 0v2.101z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</button>
+			</div>
+		</div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const homeworkData = {
-          thema1: {
-            articleUrl:
-              "inspiratie-materiaal/Systems-based approach to contemporary business management.pdf",
-            videoUrl: "https://youtu.be/kg2E3GHnWU0?si=zwoishwkaLzZW42e",
-          },
-          thema2: {
-            articleUrl: "inspiratie-materiaal/hai_ai_index_report_2025.pdf",
-            videoUrl: "https://youtu.be/tlJQuF2Mxvg?si=C8QnG-YqfiD4sKIA",
-          },
-          thema3: {
-            articleUrl:
-              "inspiratie-materiaal/Bringing True Strategic Foresight Back to Business.pdf",
-            videoUrl: "https://youtu.be/tye525dkfi8?si=PsiqMzOeQZU6O1Vd",
-          },
-          thema4: {
-            articleUrl:
-              "inspiratie-materiaal/Coffay and Bocken - 2023 - Sustainable by design An organizational design tool for sustainable business model innovation.pdf",
-            videoUrl: "https://youtu.be/JCnRzABRQ8U?si=fIzYcUQdia2FHZ1Q",
-          },
-          thema5: {
-            articleUrl:
-              "inspiratie-materiaal/Building dynamic capabilities for digital transfor.pdf",
-            videoUrl: "https://youtu.be/VAq7qJ2nzAQ?si=7mGxL8apIPYnhtrf",
-          },
-        };
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const homeworkData = {
+					thema1: {
+						articleUrl:
+							"inspiratie-materiaal/Systems-based approach to contemporary business management.pdf",
+						videoUrl: "https://youtu.be/kg2E3GHnWU0?si=zwoishwkaLzZW42e",
+					},
+					thema2: {
+						articleUrl: "inspiratie-materiaal/hai_ai_index_report_2025.pdf",
+						videoUrl: "https://youtu.be/tlJQuF2Mxvg?si=C8QnG-YqfiD4sKIA",
+					},
+					thema3: {
+						articleUrl:
+							"inspiratie-materiaal/Bringing True Strategic Foresight Back to Business.pdf",
+						videoUrl: "https://youtu.be/tye525dkfi8?si=PsiqMzOeQZU6O1Vd",
+					},
+					thema4: {
+						articleUrl:
+							"inspiratie-materiaal/Coffay and Bocken - 2023 - Sustainable by design An organizational design tool for sustainable business model innovation.pdf",
+						videoUrl: "https://youtu.be/JCnRzABRQ8U?si=fIzYcUQdia2FHZ1Q",
+					},
+					thema5: {
+						articleUrl:
+							"inspiratie-materiaal/Building dynamic capabilities for digital transfor.pdf",
+						videoUrl: "https://youtu.be/VAq7qJ2nzAQ?si=7mGxL8apIPYnhtrf",
+					},
+				};
 
-        function populateHomeworkLinks() {
-          for (const [themeKey, urls] of Object.entries(homeworkData)) {
-            const themeNumber = themeKey.replace("thema", "");
+				function populateHomeworkLinks() {
+					for (const [themeKey, urls] of Object.entries(homeworkData)) {
+						const themeNumber = themeKey.replace("thema", "");
 
-            const articleLink = document.getElementById(
-              `article-link-${themeNumber}`
-            );
-            const videoLink = document.getElementById(
-              `video-link-${themeNumber}`
-            );
+						const articleLink = document.getElementById(
+							`article-link-${themeNumber}`
+						);
+						const videoLink = document.getElementById(
+							`video-link-${themeNumber}`
+						);
 
-            if (articleLink) articleLink.href = urls.articleUrl;
-            if (videoLink) videoLink.href = urls.videoUrl;
-          }
-        }
-        populateHomeworkLinks();
+						if (articleLink) articleLink.href = urls.articleUrl;
+						if (videoLink) videoLink.href = urls.videoUrl;
+					}
+				}
+				populateHomeworkLinks();
 
-        const newProgramList = `
+				const newProgramList = `
                     <ul class="space-y-4">
                         <li class="flex items-start"><span class="text-teal-500 font-bold w-16 shrink-0">0-5'</span><span><strong class="text-slate-900">Intro & instructies</strong> (plenair)</span></li>
                         <li class="flex items-start"><span class="text-teal-500 font-bold w-16 shrink-0">5-20'</span><span><strong class="text-slate-900">Brainstorm in team</strong></span></li>
@@ -1064,266 +998,266 @@ Creëer het LinkedIn-profiel volgens de onderstaande structuur. Wees creatief en
                         <li class="flex items-start"><span class="text-teal-500 font-bold w-16 shrink-0">50-60'</span><span><strong class="text-slate-900">Inventarisatie:</strong> rolbeeld, uitdagingen & benodigdheden?</span></li>
                     </ul>`;
 
-        const actionButtons = `
+				const actionButtons = `
                     <div class="space-y-3 mt-4">
                         <button class="w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-pink-600 transition-all duration-300 transform hover:scale-105" onclick="openModal('modal{MODAL_ID}')">Bekijk voorbereiding</button>
                         <button class="w-full bg-teal-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition-all duration-300 transform hover:scale-105" onclick="openModal('prompt-modal')">Bekijk Prompt Template</button>
                     </div>`;
 
-        const feedbackButtonHtml = `<a href="https://hanbedrijfskunde.github.io/retrospective/?workshop=BK%205.0" target="_blank" class="block mt-3 w-full text-center bg-amber-400 text-amber-900 font-bold py-3 px-6 rounded-lg hover:bg-amber-500 transition-all duration-300 transform hover:scale-105">Geef feedback over de workshop</a>`;
+				const feedbackButtonHtml = `<a href="https://hanbedrijfskunde.github.io/retrospective/?workshop=BK%205.0" target="_blank" class="block mt-3 w-full text-center bg-amber-400 text-amber-900 font-bold py-3 px-6 rounded-lg hover:bg-amber-500 transition-all duration-300 transform hover:scale-105">Geef feedback over de workshop</a>`;
 
-        const themeContents = {
-          thema1: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 1: De ecosysteem-architect</h3><p class="font-semibold text-teal-600 mb-4">Focus: strategie, systeemdenken en cross-sectorale samenwerking.</p><p class="mb-6">Binnen dit thema verkennen we hoe de BK'er 5.0 functioneert als een strategische bouwer van waardeketens en netwerken.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
-            "{MODAL_ID}",
-            "1"
-          )}${feedbackButtonHtml}</div></div></div>`,
-          thema2: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 2: De mens-AI teamleider</h3><p class="font-semibold text-teal-600 mb-4">Focus: operationele impact AI, nieuwe manieren van werken, en human-centric leiderschap.</p><p class="mb-6">Binnen dit thema zoomen we in op de veranderende rol van de manager die effectief hybride teams van mensen en AI-agenten aanstuurt.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
-            "{MODAL_ID}",
-            "2"
-          )}${feedbackButtonHtml}</div></div></div>`,
-          thema3: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 3: De toekomst-verkenner</h3><p class="font-semibold text-teal-600 mb-4">Focus: dynamische capabilities, trend-sensing en agile strategie.</p><p class="mb-6">Binnen dit thema dagen we je uit om vooruit te kijken en studenten te trainen om proactief te navigeren in een onzekere toekomst.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
-            "{MODAL_ID}",
-            "3"
-          )}${feedbackButtonHtml}</div></div></div>`,
-          thema4: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 4: De ethische navigator</h3><p class="font-semibold text-teal-600 mb-4">Focus: moreel kompas, verantwoord ondernemen en de 'dark side' van technologie.</p><p class="mb-6">Binnen dit thema ontwikkelen we het morele kompas van de bedrijfskundige om verantwoorde beslissingen te nemen in een complexe wereld.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
-            "{MODAL_ID}",
-            "4"
-          )}${feedbackButtonHtml}</div></div></div>`,
-          thema5: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 5: De transformatie-driver</h3><p class="font-semibold text-teal-600 mb-4">Focus: verandermanagement, implementatiekracht en het bouwen van 'dynamic capabilities'.</p><p class="mb-6">Binnen dit thema leiden we doeners op die digitale transformatie in de praktijk kunnen trekken en borgen.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
-            "{MODAL_ID}",
-            "5"
-          )}${feedbackButtonHtml}</div></div></div>`,
-        };
+				const themeContents = {
+					thema1: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 1: De ecosysteem-architect</h3><p class="font-semibold text-teal-600 mb-4">Focus: strategie, systeemdenken en cross-sectorale samenwerking.</p><p class="mb-6">Binnen dit thema verkennen we hoe de BK'er 5.0 functioneert als een strategische bouwer van waardeketens en netwerken.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
+						"{MODAL_ID}",
+						"1"
+					)}${feedbackButtonHtml}</div></div></div>`,
+					thema2: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 2: De mens-AI teamleider</h3><p class="font-semibold text-teal-600 mb-4">Focus: operationele impact AI, nieuwe manieren van werken, en human-centric leiderschap.</p><p class="mb-6">Binnen dit thema zoomen we in op de veranderende rol van de manager die effectief hybride teams van mensen en AI-agenten aanstuurt.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
+						"{MODAL_ID}",
+						"2"
+					)}${feedbackButtonHtml}</div></div></div>`,
+					thema3: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 3: De toekomst-verkenner</h3><p class="font-semibold text-teal-600 mb-4">Focus: dynamische capabilities, trend-sensing en agile strategie.</p><p class="mb-6">Binnen dit thema dagen we je uit om vooruit te kijken en studenten te trainen om proactief te navigeren in een onzekere toekomst.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
+						"{MODAL_ID}",
+						"3"
+					)}${feedbackButtonHtml}</div></div></div>`,
+					thema4: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 4: De ethische navigator</h3><p class="font-semibold text-teal-600 mb-4">Focus: moreel kompas, verantwoord ondernemen en de 'dark side' van technologie.</p><p class="mb-6">Binnen dit thema ontwikkelen we het morele kompas van de bedrijfskundige om verantwoorde beslissingen te nemen in een complexe wereld.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
+						"{MODAL_ID}",
+						"4"
+					)}${feedbackButtonHtml}</div></div></div>`,
+					thema5: `<div class="bg-white p-8 rounded-lg shadow-xl"><h3 class="text-2xl font-bold mb-2 text-teal-800">Thema 5: De transformatie-driver</h3><p class="font-semibold text-teal-600 mb-4">Focus: verandermanagement, implementatiekracht en het bouwen van 'dynamic capabilities'.</p><p class="mb-6">Binnen dit thema leiden we doeners op die digitale transformatie in de praktijk kunnen trekken en borgen.</p><div class="grid md:grid-cols-2 gap-8"><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Programma (60 min)</h4>${newProgramList}</div><div><h4 class="text-lg font-semibold mb-3 border-b pb-2 text-teal-700">Acties</h4>${actionButtons.replace(
+						"{MODAL_ID}",
+						"5"
+					)}${feedbackButtonHtml}</div></div></div>`,
+				};
 
-        document
-          .getElementById("copy-prompt-btn")
-          .addEventListener("click", function () {
-            const promptText = document.getElementById("prompt-text").innerText;
-            navigator.clipboard.writeText(promptText).then(
-              () => {
-                this.innerText = "Gekopieerd!";
-                setTimeout(() => {
-                  this.innerText = "Kopieer";
-                }, 2000);
-              },
-              (err) => {
-                console.error("Kon tekst niet kopiëren: ", err);
-              }
-            );
-          });
+				document
+					.getElementById("copy-prompt-btn")
+					.addEventListener("click", function () {
+						const promptText = document.getElementById("prompt-text").innerText;
+						navigator.clipboard.writeText(promptText).then(
+							() => {
+								this.innerText = "Gekopieerd!";
+								setTimeout(() => {
+									this.innerText = "Kopieer";
+								}, 2000);
+							},
+							(err) => {
+								console.error("Kon tekst niet kopiëren: ", err);
+							}
+						);
+					});
 
-        const timerContent = document.getElementById("timer-content");
-        const timerDisplay = document.getElementById("timer-display");
-        const activityDisplay = document.getElementById("timer-activity");
-        const progressCircle = document.getElementById("timer-progress-circle");
-        const controlBtn = document.getElementById("timer-control-btn");
-        const nextBtn = document.getElementById("timer-next-btn");
-        const resetBtn = document.getElementById("timer-reset-btn");
+				const timerContent = document.getElementById("timer-content");
+				const timerDisplay = document.getElementById("timer-display");
+				const activityDisplay = document.getElementById("timer-activity");
+				const progressCircle = document.getElementById("timer-progress-circle");
+				const controlBtn = document.getElementById("timer-control-btn");
+				const nextBtn = document.getElementById("timer-next-btn");
+				const resetBtn = document.getElementById("timer-reset-btn");
 
-        const radius = progressCircle.r.baseVal.value;
-        const circumference = 2 * Math.PI * radius;
-        progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+				const radius = progressCircle.r.baseVal.value;
+				const circumference = 2 * Math.PI * radius;
+				progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-        const activities = [
-          { name: "Intro & instructies", duration: 300 },
-          { name: "Brainstorm in team", duration: 900 },
-          { name: "Formulering persona", duration: 900 },
-          { name: "AI in actie", duration: 900 },
-          { name: "Inventarisatie", duration: 600 },
-        ];
-        let currentActivityIndex = 0;
-        let timeLeft = activities[currentActivityIndex].duration;
-        let timerInterval = null;
-        let isPaused = true;
+				const activities = [
+					{ name: "Intro & instructies", duration: 300 },
+					{ name: "Brainstorm in team", duration: 900 },
+					{ name: "Formulering persona", duration: 900 },
+					{ name: "AI in actie", duration: 900 },
+					{ name: "Inventarisatie", duration: 600 },
+				];
+				let currentActivityIndex = 0;
+				let timeLeft = activities[currentActivityIndex].duration;
+				let timerInterval = null;
+				let isPaused = true;
 
-        function updateDisplay() {
-          const timerDisp = document.getElementById("timer-display");
-          const activityDisp = document.getElementById("timer-activity");
-          if (!timerDisp || !activityDisp) return; // Exit if elements are gone
+				function updateDisplay() {
+					const timerDisp = document.getElementById("timer-display");
+					const activityDisp = document.getElementById("timer-activity");
+					if (!timerDisp || !activityDisp) return; // Exit if elements are gone
 
-          const minutes = Math.floor(timeLeft / 60);
-          const seconds = timeLeft % 60;
-          timerDisp.textContent = `${String(minutes).padStart(2, "0")}:${String(
-            seconds
-          ).padStart(2, "0")}`;
-          activityDisp.textContent = activities[currentActivityIndex].name;
-          const progress =
-            (activities[currentActivityIndex].duration - timeLeft) /
-            activities[currentActivityIndex].duration;
-          const offset = circumference - progress * circumference;
-          progressCircle.style.strokeDashoffset = offset;
-        }
+					const minutes = Math.floor(timeLeft / 60);
+					const seconds = timeLeft % 60;
+					timerDisp.textContent = `${String(minutes).padStart(2, "0")}:${String(
+						seconds
+					).padStart(2, "0")}`;
+					activityDisp.textContent = activities[currentActivityIndex].name;
+					const progress =
+						(activities[currentActivityIndex].duration - timeLeft) /
+						activities[currentActivityIndex].duration;
+					const offset = circumference - progress * circumference;
+					progressCircle.style.strokeDashoffset = offset;
+				}
 
-        function playAlarm() {
-          if (Tone.context.state !== "running") {
-            Tone.context.resume();
-          }
-          const synth = new Tone.Synth().toDestination();
-          synth.triggerAttackRelease("C5", "0.2s", Tone.now());
-          synth.triggerAttackRelease("G5", "0.2s", Tone.now() + 0.3);
-        }
+				function playAlarm() {
+					if (Tone.context.state !== "running") {
+						Tone.context.resume();
+					}
+					const synth = new Tone.Synth().toDestination();
+					synth.triggerAttackRelease("C5", "0.2s", Tone.now());
+					synth.triggerAttackRelease("G5", "0.2s", Tone.now() + 0.3);
+				}
 
-        function nextActivity() {
-          clearInterval(timerInterval);
-          currentActivityIndex++;
-          if (currentActivityIndex >= activities.length) {
-            const timerCont = document.getElementById("timer-content");
-            if (timerCont) {
-              timerCont.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-teal-500" viewBox="0 0 20 20" fill="currentColor">
+				function nextActivity() {
+					clearInterval(timerInterval);
+					currentActivityIndex++;
+					if (currentActivityIndex >= activities.length) {
+						const timerCont = document.getElementById("timer-content");
+						if (timerCont) {
+							timerCont.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-teal-500" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.562 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a2 2 0 00-1.8 2.4z" />
                         </svg><p class="font-bold text-teal-700 mt-2">Great job!</p>`;
-            }
-            isPaused = true;
-            controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
-            return;
-          }
-          timeLeft = activities[currentActivityIndex].duration;
-          updateDisplay();
-          if (!isPaused) startTimer();
-        }
+						}
+						isPaused = true;
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+						return;
+					}
+					timeLeft = activities[currentActivityIndex].duration;
+					updateDisplay();
+					if (!isPaused) startTimer();
+				}
 
-        function startTimer() {
-          timerInterval = setInterval(() => {
-            timeLeft--;
-            updateDisplay();
-            if (timeLeft <= 0) {
-              playAlarm();
-              nextActivity();
-            }
-          }, 1000);
-        }
+				function startTimer() {
+					timerInterval = setInterval(() => {
+						timeLeft--;
+						updateDisplay();
+						if (timeLeft <= 0) {
+							playAlarm();
+							nextActivity();
+						}
+					}, 1000);
+				}
 
-        controlBtn.addEventListener("click", () => {
-          isPaused = !isPaused;
-          if (isPaused) {
-            clearInterval(timerInterval);
-            controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
-          } else {
-            startTimer();
-            controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
-          }
-        });
+				controlBtn.addEventListener("click", () => {
+					isPaused = !isPaused;
+					if (isPaused) {
+						clearInterval(timerInterval);
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+					} else {
+						startTimer();
+						controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
+					}
+				});
 
-        nextBtn.addEventListener("click", () => {
-          playAlarm();
-          nextActivity();
-        });
+				nextBtn.addEventListener("click", () => {
+					playAlarm();
+					nextActivity();
+				});
 
-        resetBtn.addEventListener("click", () => {
-          clearInterval(timerInterval);
-          const timerCont = document.getElementById("timer-content");
-          if (timerCont) {
-            timerCont.innerHTML = `<div id="timer-display" class="text-4xl font-bold text-teal-800">05:00</div>
+				resetBtn.addEventListener("click", () => {
+					clearInterval(timerInterval);
+					const timerCont = document.getElementById("timer-content");
+					if (timerCont) {
+						timerCont.innerHTML = `<div id="timer-display" class="text-4xl font-bold text-teal-800">05:00</div>
                 <p id="timer-activity" class="text-sm text-slate-500 max-w-[120px] leading-tight">Intro & instructies</p>`;
-          }
-          currentActivityIndex = 0;
-          timeLeft = activities[currentActivityIndex].duration;
-          isPaused = true;
-          controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
-          updateDisplay();
-        });
+					}
+					currentActivityIndex = 0;
+					timeLeft = activities[currentActivityIndex].duration;
+					isPaused = true;
+					controlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>`;
+					updateDisplay();
+				});
 
-        const voorkeurForm = document.getElementById("voorkeur-form");
-        const formFeedback = document.getElementById("form-feedback");
-        voorkeurForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          const formData = new FormData(voorkeurForm);
-          const data = {
-            voornaam: formData.get("voornaam"),
-            voorkeur1: formData.get("voorkeur1"),
-            voorkeur2: formData.get("voorkeur2"),
-            voorkeur3: formData.get("voorkeur3"),
-          };
-          if (
-            !data.voorkeur1 ||
-            !data.voorkeur2 ||
-            !data.voorkeur3 ||
-            new Set([data.voorkeur1, data.voorkeur2, data.voorkeur3]).size !== 3
-          ) {
-            formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Selecteer alsjeblieft drie unieke voorkeuren.</p>`;
-            return;
-          }
-          formFeedback.innerHTML = `<p class="text-teal-600">Voorkeur wordt verstuurd...</p>`;
-          const apiUrl =
-            "https://plankton-app-mcr3b.ondigitalocean.app/submit_voorkeur";
-          fetch(apiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(
-                  `Connectie met backend mislukt! Status: ${response.status}`
-                );
-              }
-              return response.json();
-            })
-            .then((result) => {
-              formFeedback.innerHTML = `<p class="text-green-600 font-semibold">Bedankt, ${data.voornaam}! Je voorkeuren zijn succesvol ontvangen.</p>`;
-              voorkeurForm.reset();
-            })
-            .catch((error) => {
-              console.error("API Error:", error);
-              formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Fout bij versturen.</p><p class="text-sm text-gray-500">Kon de server niet bereiken. Controleer de API URL en de serverlogs.</p>`;
-            });
-        });
+				const voorkeurForm = document.getElementById("voorkeur-form");
+				const formFeedback = document.getElementById("form-feedback");
+				voorkeurForm.addEventListener("submit", function (event) {
+					event.preventDefault();
+					const formData = new FormData(voorkeurForm);
+					const data = {
+						voornaam: formData.get("voornaam"),
+						voorkeur1: formData.get("voorkeur1"),
+						voorkeur2: formData.get("voorkeur2"),
+						voorkeur3: formData.get("voorkeur3"),
+					};
+					if (
+						!data.voorkeur1 ||
+						!data.voorkeur2 ||
+						!data.voorkeur3 ||
+						new Set([data.voorkeur1, data.voorkeur2, data.voorkeur3]).size !== 3
+					) {
+						formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Selecteer alsjeblieft drie unieke voorkeuren.</p>`;
+						return;
+					}
+					formFeedback.innerHTML = `<p class="text-teal-600">Voorkeur wordt verstuurd...</p>`;
+					const apiUrl =
+						"https://plankton-app-mcr3b.ondigitalocean.app/submit_voorkeur";
+					fetch(apiUrl, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					})
+						.then((response) => {
+							if (!response.ok) {
+								throw new Error(
+									`Connectie met backend mislukt! Status: ${response.status}`
+								);
+							}
+							return response.json();
+						})
+						.then((result) => {
+							formFeedback.innerHTML = `<p class="text-green-600 font-semibold">Bedankt, ${data.voornaam}! Je voorkeuren zijn succesvol ontvangen.</p>`;
+							voorkeurForm.reset();
+						})
+						.catch((error) => {
+							console.error("API Error:", error);
+							formFeedback.innerHTML = `<p class="text-red-600 font-semibold">Fout bij versturen.</p><p class="text-sm text-gray-500">Kon de server niet bereiken. Controleer de API URL en de serverlogs.</p>`;
+						});
+				});
 
-        const tabs = document.querySelectorAll(".tab-button");
-        const tabSlider = document.querySelector(".tab-slider");
-        const tabContentContainer = document.querySelector(".relative");
-        function updateSliderPosition(activeTab) {
-          if (!activeTab || !tabSlider) return;
-          const nav = activeTab.parentElement;
-          const navRect = nav.getBoundingClientRect();
-          const activeTabRect = activeTab.getBoundingClientRect();
-          tabSlider.style.width = `${activeTabRect.width}px`;
-          tabSlider.style.left = `${activeTabRect.left - navRect.left}px`;
-        }
-        function loadThemeContent(themeId) {
-          const content =
-            themeContents[themeId] || "<div>Content niet gevonden.</div>";
-          tabContentContainer.innerHTML = `<div id="${themeId}" class="tab-content-active">${content}</div>`;
-        }
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", () => {
-            const targetId = tab.getAttribute("data-target");
-            loadThemeContent(targetId);
-            tabs.forEach((item) => item.classList.remove("tab-active"));
-            tab.classList.add("tab-active");
-            updateSliderPosition(tab);
-          });
-        });
+				const tabs = document.querySelectorAll(".tab-button");
+				const tabSlider = document.querySelector(".tab-slider");
+				const tabContentContainer = document.querySelector(".relative");
+				function updateSliderPosition(activeTab) {
+					if (!activeTab || !tabSlider) return;
+					const nav = activeTab.parentElement;
+					const navRect = nav.getBoundingClientRect();
+					const activeTabRect = activeTab.getBoundingClientRect();
+					tabSlider.style.width = `${activeTabRect.width}px`;
+					tabSlider.style.left = `${activeTabRect.left - navRect.left}px`;
+				}
+				function loadThemeContent(themeId) {
+					const content =
+						themeContents[themeId] || "<div>Content niet gevonden.</div>";
+					tabContentContainer.innerHTML = `<div id="${themeId}" class="tab-content-active">${content}</div>`;
+				}
+				tabs.forEach((tab) => {
+					tab.addEventListener("click", () => {
+						const targetId = tab.getAttribute("data-target");
+						loadThemeContent(targetId);
+						tabs.forEach((item) => item.classList.remove("tab-active"));
+						tab.classList.add("tab-active");
+						updateSliderPosition(tab);
+					});
+				});
 
-        const scrollElements = document.querySelectorAll(".animate-on-scroll");
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.1 }
-        );
-        scrollElements.forEach((el) => observer.observe(el));
-        const initialActiveTab = document.querySelector(
-          ".tab-button.tab-active"
-        );
-        loadThemeContent(initialActiveTab.getAttribute("data-target"));
-        setTimeout(() => updateSliderPosition(initialActiveTab), 100);
-        window.addEventListener("resize", () =>
-          updateSliderPosition(document.querySelector(".tab-button.tab-active"))
-        );
-      });
+				const scrollElements = document.querySelectorAll(".animate-on-scroll");
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								entry.target.classList.add("is-visible");
+								observer.unobserve(entry.target);
+							}
+						});
+					},
+					{ threshold: 0.1 }
+				);
+				scrollElements.forEach((el) => observer.observe(el));
+				const initialActiveTab = document.querySelector(
+					".tab-button.tab-active"
+				);
+				loadThemeContent(initialActiveTab.getAttribute("data-target"));
+				setTimeout(() => updateSliderPosition(initialActiveTab), 100);
+				window.addEventListener("resize", () =>
+					updateSliderPosition(document.querySelector(".tab-button.tab-active"))
+				);
+			});
 
-      function openModal(modalId) {
-        document.getElementById(modalId).classList.add("active");
-      }
-      function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove("active");
-      }
-    </script>
-  </body>
+			function openModal(modalId) {
+				document.getElementById(modalId).classList.add("active");
+			}
+			function closeModal(modalId) {
+				document.getElementById(modalId).classList.remove("active");
+			}
+		</script>
+	</body>
 </html>
