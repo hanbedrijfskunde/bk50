@@ -1,0 +1,12 @@
+# Requirements voor Workshop Team Indeling Programma
+# Installeer met: pip install -r requirements.txt
+
+# Data verwerking
+pandas==2.2.0
+
+# Optimalisatie solver van Google
+ortools==9.8.3296
+
+# Optioneel: voor snellere pandas operaties
+# openpyxl==3.1.2  # Voor Excel export/import
+# xlrd==2.0.1      # Voor het lezen van oudere Excel bestanden
