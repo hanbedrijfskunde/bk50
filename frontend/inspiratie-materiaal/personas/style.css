@@ -1,0 +1,17 @@
+/* style.css (kan leeg zijn of specifieke toevoegingen bevatten) */
+
+/* Bijvoorbeeld, als je een globalere body background gradient wilt: */
+/*
+body {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%) fixed;
+    color: #e2e8f0;
+}
+*/
+
+/* Voor line-clamp functionaliteit (Tailwind heeft hier een plugin voor, maar dit is een CSS fallback) */
+.line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}

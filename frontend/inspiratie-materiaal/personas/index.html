@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Bedrijfskundigen 5.0 - Toekomst Visies</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@700&display=swap"
+			rel="stylesheet"
+		/>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+		<style>
+			body {
+				font-family: "Poppins", sans-serif;
+			}
+			.title-font {
+				font-family: "Orbitron", sans-serif;
+			}
+			.card-gradient {
+				background-image: linear-gradient(to right bottom, #00c6ff, #0072ff);
+			}
+			.card-gradient-alt1 {
+				background-image: linear-gradient(to right bottom, #f7971e, #ffd200);
+			}
+			.card-gradient-alt2 {
+				background-image: linear-gradient(to right bottom, #ad5389, #3c1053);
+			}
+			.card-gradient-alt3 {
+				background-image: linear-gradient(to right bottom, #11998e, #38ef7d);
+			}
+			.card-gradient-alt4 {
+				background-image: linear-gradient(to right bottom, #ff512f, #dd2476);
+			}
+
+			.persona-card {
+				transition: transform 0.3s ease;
+			}
+
+			.persona-card:hover {
+				transform: translateY(-8px) scale(1.02);
+			}
+
+			[x-cloak] {
+				display: none !important;
+			}
+
+			/* Simple Modal Styling */
+			.simple-modal {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.8);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 1000;
+				padding: 1rem;
+			}
+
+			.modal-box {
+				background: #1f2937;
+				border-radius: 1rem;
+				max-width: 4xl;
+				width: 100%;
+				max-height: 90vh;
+				overflow: hidden;
+				border: 1px solid #374151;
+			}
+
+			.modal-header-simple {
+				background: #111827;
+				padding: 1.5rem;
+				border-bottom: 1px solid #374151;
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+			}
+
+			.modal-body {
+				padding: 2rem;
+				max-height: calc(90vh - 120px);
+				overflow-y: auto;
+			}
+
+			.section {
+				background: #374151;
+				border-radius: 0.75rem;
+				padding: 1.5rem;
+				margin-bottom: 1.5rem;
+				border: 1px solid #4b5563;
+			}
+
+			.section-title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				color: #a855f7;
+				margin-bottom: 1rem;
+				border-bottom: 2px solid #a855f7;
+				padding-bottom: 0.5rem;
+			}
+
+			.item {
+				margin-bottom: 1.5rem;
+				padding-bottom: 1rem;
+				border-bottom: 1px solid #6b7280;
+			}
+
+			.item:last-child {
+				border-bottom: none;
+				margin-bottom: 0;
+			}
+
+			.item-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				color: white;
+				margin-bottom: 0.5rem;
+			}
+
+			.item-subtitle {
+				font-size: 1rem;
+				color: #c4b5fd;
+				margin-bottom: 0.5rem;
+			}
+
+			.item-date {
+				font-size: 0.875rem;
+				color: #9ca3af;
+				background: #4b5563;
+				padding: 0.25rem 0.75rem;
+				border-radius: 1rem;
+				display: inline-block;
+			}
+
+			.text-content {
+				color: #e5e7eb;
+				line-height: 1.6;
+				margin-top: 0.75rem;
+			}
+
+			.text-content p {
+				margin-bottom: 1rem;
+			}
+
+			.list-content {
+				margin-top: 0.75rem;
+			}
+
+			.list-content li {
+				color: #e5e7eb;
+				margin-bottom: 0.5rem;
+				padding-left: 1rem;
+				position: relative;
+			}
+
+			.list-content li::before {
+				content: "•";
+				color: #a855f7;
+				font-weight: bold;
+				position: absolute;
+				left: 0;
+			}
+
+			.skill-tag {
+				background: linear-gradient(to right, #7c3aed, #a855f7);
+				color: white;
+				padding: 0.5rem 1rem;
+				border-radius: 1rem;
+				font-size: 0.875rem;
+				font-weight: 500;
+				margin: 0.25rem 0.25rem 0.25rem 0;
+				display: inline-block;
+			}
+
+			.recommendation {
+				background: #4b5563;
+				padding: 1.5rem;
+				border-radius: 0.75rem;
+				margin-bottom: 1rem;
+				border-left: 4px solid #a855f7;
+			}
+
+			.recommendation-text {
+				color: #e5e7eb;
+				font-style: italic;
+				font-size: 1.125rem;
+				line-height: 1.6;
+				margin-bottom: 1rem;
+			}
+
+			.recommendation-author {
+				color: #c4b5fd;
+				font-weight: 600;
+				text-align: right;
+			}
+
+			.close-btn {
+				background: none;
+				border: none;
+				color: #9ca3af;
+				font-size: 2rem;
+				cursor: pointer;
+				padding: 0;
+				line-height: 1;
+			}
+
+			.close-btn:hover {
+				color: white;
+			}
+
+			/* Scrollbar styling */
+			.modal-body::-webkit-scrollbar {
+				width: 8px;
+			}
+
+			.modal-body::-webkit-scrollbar-track {
+				background: #374151;
+				border-radius: 4px;
+			}
+
+			.modal-body::-webkit-scrollbar-thumb {
+				background: #7c3aed;
+				border-radius: 4px;
+			}
+
+			.modal-body::-webkit-scrollbar-thumb:hover {
+				background: #a855f7;
+			}
+		</style>
+	</head>
+	<body
+		class="bg-gray-900 text-white selection:bg-purple-500 selection:text-white"
+		x-data="{ openModal: '' }"
+	>
+		<div class="container mx-auto px-4 py-12">
+			<header class="text-center mb-16">
+				<h1 class="title-font text-5xl md:text-7xl font-bold mb-4">
+					<span
+						class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+					>
+						Bedrijfskundigen 5.0
+					</span>
+				</h1>
+				<p class="text-xl md:text-2xl text-gray-300">
+					Ontwerp vandaag, verander morgen, inspireer altijd
+				</p>
+			</header>
+
+			<div
+				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-12"
+			>
+				<!-- Persona 1: Noor Jacobs -->
+				<div
+					class="persona-card bg-gray-800 rounded-xl shadow-2xl overflow-hidden"
+				>
+					<div class="relative">
+						<img
+							src="photos/noor.png"
+							alt="Noor Jacobs"
+							class="w-full h-72 object-cover"
+							onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGEwNTZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vb3IgSmFjb2JzPC90ZXh0Pjwvc3ZnPg==';"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+						></div>
+						<div class="absolute bottom-0 left-0 p-6">
+							<h2 class="text-3xl font-bold text-white">Noor Jacobs</h2>
+							<p class="text-purple-300 text-base">Transformatie-Driver</p>
+						</div>
+					</div>
+					<div class="p-6">
+						<p class="text-gray-400 text-sm italic mb-4">
+							"Architect van hyperadaptieve dynamic capabilities & AI-gedreven
+							implementatiekrachten"
+						</p>
+						<p class="text-gray-300 mb-6 text-sm leading-relaxed line-clamp-3">
+							Ontwerpt organisaties die wendbaar én toekomstbestendig opereren.
+							Integreert AI en XR in change-processen, verhoogt change-speed en
+							forceert adoptie van nieuwe businessmodellen.
+						</p>
+						<button
+							@click="openModal = 'noorJacobs'"
+							class="w-full card-gradient text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity duration-200"
+						>
+							Meer over Noor
+						</button>
+					</div>
+				</div>
+
+				<!-- Persona 2: Elian de Vries -->
+				<div
+					class="persona-card bg-gray-800 rounded-xl shadow-2xl overflow-hidden"
+				>
+					<div class="relative">
+						<img
+							src="photos/elian.png"
+							alt="Elian de Vries"
+							class="w-full h-72 object-cover"
+							onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjOWYyYzY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVsaWFuIGRlIFZyaWVzPC90ZXh0Pjwvc3ZnPg==';"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+						></div>
+						<div class="absolute bottom-0 left-0 p-6">
+							<h2 class="text-3xl font-bold text-white">Elian de Vries</h2>
+							<p class="text-pink-300 text-base">Toekomst-Scout</p>
+						</div>
+					</div>
+					<div class="p-6">
+						<p class="text-gray-400 text-sm italic mb-4">
+							"Trend-Sensing, Ecosystem Co-Creatie & Infinite-Game Strategie"
+						</p>
+						<p class="text-gray-300 mb-6 text-sm leading-relaxed line-clamp-3">
+							Combineert data-gedreven analyses met creatieve intuïtie. Ontwerpt
+							samenwerkingsmodellen voor visionair leiderschap en duurzame
+							ketens met het "Infinite Game Strategy XR-Playbook".
+						</p>
+						<button
+							@click="openModal = 'elianDeVries'"
+							class="w-full card-gradient-alt4 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity duration-200"
+						>
+							Meer over Elian
+						</button>
+					</div>
+				</div>
+
+				<!-- Persona 3: Jordan van Leeuwen -->
+				<div
+					class="persona-card bg-gray-800 rounded-xl shadow-2xl overflow-hidden"
+				>
+					<div class="relative">
+						<img
+							src="photos/jordan.png"
+							alt="Jordan van Leeuwen"
+							class="w-full h-72 object-cover"
+							onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGQ5NDg4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkpvcmRhbiB2YW4gTGVldXdlbjwvdGV4dD48L3N2Zz4=';"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+						></div>
+						<div class="absolute bottom-0 left-0 p-6">
+							<h2 class="text-3xl font-bold text-white">Jordan van Leeuwen</h2>
+							<p class="text-teal-300 text-base">Mens-AI-Teamleider</p>
+						</div>
+					</div>
+					<div class="p-6">
+						<p class="text-gray-400 text-sm italic mb-4">
+							"Orkestreert hypermenselijke AI-samenwerking en operationele
+							transformatie"
+						</p>
+						<p class="text-gray-300 mb-6 text-sm leading-relaxed line-clamp-3">
+							Ontwerpt symbiotische werkmodellen voor mens-machine harmonie.
+							Gebruikt "SymbioseAI XR-Hub" voor validatie en optimalisatie van
+							werkprocessen, verhoogt medewerkertevredenheid.
+						</p>
+						<button
+							@click="openModal = 'jordanVanLeeuwen'"
+							class="w-full card-gradient-alt3 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity duration-200"
+						>
+							Meer over Jordan
+						</button>
+					</div>
+				</div>
+
+				<!-- Persona 4: Avery Malik -->
+				<div
+					class="persona-card bg-gray-800 rounded-xl shadow-2xl overflow-hidden"
+				>
+					<div class="relative">
+						<img
+							src="photos/avery.png"
+							alt="Avery Malik"
+							class="w-full h-72 object-cover"
+							onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjU5ZTBiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkF2ZXJ5IE1hbGlrPC90ZXh0Pjwvc3ZnPg==';"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+						></div>
+						<div class="absolute bottom-0 left-0 p-6">
+							<h2 class="text-3xl font-bold text-white">Avery Malik</h2>
+							<p class="text-yellow-300 text-base">Ethics-Navigator</p>
+						</div>
+					</div>
+					<div class="p-6">
+						<p class="text-gray-400 text-sm italic mb-4">
+							"Architect van duurzame SBMI en mens-AI-harmonie in 2029"
+						</p>
+						<p class="text-gray-300 mb-6 text-sm leading-relaxed line-clamp-3">
+							Leidt organisaties door complexiteit van Sustainable Business
+							Model Innovation (SBMI) in AI-tijdperk. Gebruikt "Sustainable By
+							Design 3.0" en "Ethics-as-a-Service".
+						</p>
+						<button
+							@click="openModal = 'averyMalik'"
+							class="w-full card-gradient-alt1 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity duration-200"
+						>
+							Meer over Avery
+						</button>
+					</div>
+				</div>
+
+				<!-- Persona 5: Aria Mensah -->
+				<div
+					class="persona-card bg-gray-800 rounded-xl shadow-2xl overflow-hidden"
+				>
+					<div class="relative">
+						<img
+							src="photos/aria.png"
+							alt="Aria Mensah"
+							class="w-full h-72 object-cover"
+							onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjM2NmYxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkFyaWEgTWVuc2FoPC90ZXh0Pjwvc3ZnPg==';"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+						></div>
+						<div class="absolute bottom-0 left-0 p-6">
+							<h2 class="text-3xl font-bold text-white">Aria Mensah</h2>
+							<p class="text-indigo-300 text-base">Ecosysteem-Navigator</p>
+						</div>
+					</div>
+					<div class="p-6">
+						<p class="text-gray-400 text-sm italic mb-4">
+							"Pionier in Open Strategy & R4GM-6.0 | Data-gedreven
+							stakeholder-orkestratie & circulaire innovatie"
+						</p>
+						<p class="text-gray-300 mb-6 text-sm leading-relaxed line-clamp-3">
+							Zet XR-gehoste co-creatiehubs op voor circulaire innovaties.
+							Orkestreert stakeholderbetrokkenheid met AI, digital twins en
+							blockchain voor R4GM.
+						</p>
+						<button
+							@click="openModal = 'ariaMensah'"
+							class="w-full card-gradient-alt2 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity duration-200"
+						>
+							Meer over Aria
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<footer class="text-center mt-20 py-8 border-t border-gray-700">
+				<p class="text-gray-500">
+					© 2029 Visionary Profiles Inc. Alle rechten voorbehouden.
+				</p>
+				<p class="text-gray-600 text-sm">
+					Gemaakt met een blik op de toekomst.
+				</p>
+			</footer>
+		</div>
+
+		<!-- MODALS SECTION -->
+
+		<!-- Modal for Noor Jacobs -->
+		<div
+			x-show="openModal === 'noorJacobs'"
+			@keydown.escape.window="openModal = ''"
+			class="simple-modal"
+			x-cloak
+		>
+			<div @click.away="openModal = ''" class="modal-box">
+				<div class="modal-header-simple">
+					<div>
+						<h2
+							style="
+								font-size: 1.875rem;
+								font-weight: 700;
+								color: white;
+								margin-bottom: 0.5rem;
+							"
+						>
+							Noor Jacobs
+						</h2>
+						<p style="color: #c4b5fd; font-size: 1rem">
+							Transformatie-Driver 5.0 | Architect van hyperadaptieve dynamic
+							capabilities & AI-gedreven implementatiekrachten
+						</p>
+					</div>
+					<button @click="openModal = ''" class="close-btn">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="section">
+						<h3 class="section-title">Over Mij</h3>
+						<div class="text-content">
+							<p>
+								Ik ben Aria Noor Jacobs, sinds 2029 Transformatie-Driver 5.0, en
+								ik ontwerp organisaties die wendbaar én toekomstbestendig
+								opereren in een steeds complexere wereld. Vanuit mijn
+								achtergrond in social network analysis, rapid prototyping en een
+								minor Duurzaamheid & Ethisch Ondernemen, heb ik AI en XR
+								geïntegreerd in every-day change-processen.
+							</p>
+							<p>
+								Met het "Dynamic Capabilities XR-Lab"—een wereldwijde suite van
+								immersieve change-simulators—heb ik de change-speed met
+								gemiddeld 50 % verhoogd en de adoptie van nieuwe
+								businessmodellen bij meer dan 7.000 medewerkers geforceerd. Ik
+								vertaal visie in concrete, meetbare resultaten door creatieve
+								mindset te combineren met analytische scherpte. Mijn kracht ligt
+								in het creëren van influence-maps die macht, emotie en data
+								samenbrengen, en in het boosten van 'learning loops' via
+								AI-gestuurde feedback.
+							</p>
+							<p>
+								Ik geloof in de kracht van collectieve beweging: door
+								stakeholders van alle niveaus te betrekken, bouwen we dynamic
+								capabilities die organisaties continu leren, vernieuwen en
+								spelen.
+							</p>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Uitgelicht</h3>
+						<div class="item">
+							<div class="item-title">
+								"Dynamic Capabilities 5.0: XR-Unlocked" (Whitepaper, 2028)
+							</div>
+							<div class="text-content">
+								<p>
+									Een upgrade van mijn originele publicatie, nu met immersieve
+									XR-casestudies en 9 geavanceerde microfoundations in actie.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								"AI-Gestuurde Verandering @ Futuris 2028" (Documentairevideo)
+							</div>
+							<div class="text-content">
+								<p>
+									Korte film over mijn inzet van een AI-aangedreven
+									veranderplatform dat gebruikersadoptie met 35 % versneld en
+									draagvlak vergroot.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Werkervaring</h3>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										Chief Transformation Architect 5.0
+									</div>
+									<div class="item-subtitle">Futuris Consulting</div>
+								</div>
+								<div class="item-date">Jan 2025 – heden (2029)</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Lanceerde het Dynamic Capabilities XR-Lab in 10 wereldwijde
+									hubs; realiseerde een 50 % hogere doorvoersnelheid van
+									change-initiatieven.
+								</li>
+								<li>
+									Ondersteunde 7.000+ medewerkers in rapid-prototypingtrajecten,
+									wat leidde tot 120 nieuwe businessmodel-ideeën en een 40 %
+									sneller decision-cycle.
+								</li>
+								<li>
+									Integreerde AI-gedreven influence-maps in strategie-workshops,
+									met een 30 % toename in stakeholder-alignment.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										Director of Agile Innovations & XR-Foresight
+									</div>
+									<div class="item-subtitle">NextWave Dynamics</div>
+								</div>
+								<div class="item-date">Mei 2022 – dec 2024</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Ontwikkelde XR-prototypinglabs die time-to-market met 70 %
+									verkortten voor nieuwe digitale diensten.
+								</li>
+								<li>
+									Balancede digitale portefeuilles met AI-algoritmes, leidend
+									tot drie succesvolle subscription-modellen in één jaar.
+								</li>
+								<li>
+									Faciliteerde strategische scenarioplanning met realtime
+									data-feeds; voorspelde vier disruptieve marktverschuivingen
+									met 90 % nauwkeurigheid.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Senior Strategy Engineer 3.0</div>
+									<div class="item-subtitle">Quantum Synergy Labs</div>
+								</div>
+								<div class="item-date">Sep 2019 – apr 2022</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Voerde AI-powered social network analyses uit, wat interne
+									innovatieoutput met 45 % verhoogde.
+								</li>
+								<li>
+									Ontwierp en hostte digitale living-labs voor
+									change-experimentation, waarin teams in 48 uur prototypes
+									bouwden en testten.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Opleiding</h3>
+						<div class="item">
+							<div class="item-title">
+								MBA Digital Ecosystem Leadership 2027
+							</div>
+							<div class="item-subtitle">Rotterdam School of Management</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								MSc Strategic Agility & Dynamic Capabilities 2023
+							</div>
+							<div class="item-subtitle">Erasmus Universiteit Rotterdam</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								HBO Bedrijfskunde & Digitale Transformatie 2019
+							</div>
+							<div class="item-subtitle">HAN Bedrijfskunde</div>
+						</div>
+						<div style="margin-top: 1rem">
+							<h4
+								style="color: #c4b5fd; font-weight: 600; margin-bottom: 0.5rem"
+							>
+								Specialisaties:
+							</h4>
+							<ul class="list-content">
+								<li>XR-Gehoste Scenario Planning (2026)</li>
+								<li>AI-Enhanced Social Network Analysis (2027)</li>
+								<li>Creative Change Facilitation in the Metaverse (2028)</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Certificeringen</h3>
+						<ul class="list-content">
+							<li>Certified AI-Driven Change Agent 2.0 (AI-CDA™ 2.0)</li>
+							<li>Quantum Systems Strategy Professional XR (QSSP-XR)</li>
+						</ul>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Vaardigheden (Top 5)</h3>
+						<div>
+							<span class="skill-tag">XR-gehoste transformation labs</span>
+							<span class="skill-tag"
+								>Adaptive dynamic capabilities design</span
+							>
+							<span class="skill-tag">AI-gestuurde rapid prototyping</span>
+							<span class="skill-tag">Systemic social network analysis</span>
+							<span class="skill-tag"
+								>Stakeholder engagement & influence mapping</span
+							>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Aanbevelingen</h3>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Aria combineert menselijke sensitiviteit met futuristisch
+								denkvermogen. Dankzij haar dynamic-capabilities-framework en
+								XR-labs zagen we een 50 % snellere adoptie van nieuwe
+								processen."
+							</div>
+							<div class="recommendation-author">
+								– Nova, Autonomous Collaboration Agent (AI) bij Synapse X
+							</div>
+						</div>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Haar strategische scherpte en creatieve aanpak doorbraken onze
+								grootste verandervraagstukken. De AI-influence-maps van Aria
+								brachten ongeëvenaarde helderheid in complexe
+								stakeholderlandschappen."
+							</div>
+							<div class="recommendation-author">
+								– Dr. Elias Vermeer, Chief Symbiotic Officer bij GreenSynergy
+								Innovations
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Prestaties</h3>
+						<div class="item">
+							<div class="item-title">
+								Digital Transformation Vanguard Award 2026
+							</div>
+							<div class="text-content">
+								<p>
+									Uitgereikt door de European Federation of Change Architects
+									voor baanbrekend werk in XR-gedreven dynamic capabilities.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Interesses</h3>
+						<ul class="list-content">
+							<li>
+								FutureFlow Labs (instituut voor strategische wendbaarheid)
+							</li>
+							<li>
+								Dr. Sienna Morales (thought leader in systemisch
+								verandermanagement)
+							</li>
+							<li>
+								EcoSynergy Collective (innovators in duurzame businessmodels)
+							</li>
+							<li>
+								Quantum Leadership Forum (netwerk voor next-gen veranderaars)
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for Elian de Vries -->
+		<div
+			x-show="openModal === 'elianDeVries'"
+			@keydown.escape.window="openModal = ''"
+			class="simple-modal"
+			x-cloak
+		>
+			<div @click.away="openModal = ''" class="modal-box">
+				<div class="modal-header-simple">
+					<div>
+						<h2
+							style="
+								font-size: 1.875rem;
+								font-weight: 700;
+								color: white;
+								margin-bottom: 0.5rem;
+							"
+						>
+							Elian de Vries
+						</h2>
+						<p style="color: #f9a8d4; font-size: 1rem">
+							Toekomstverkenner & Agile Capabilities Architect 5.0 |
+							Trend-Sensing, Ecosystem Co-Creatie & Infinite-Game Strategie
+						</p>
+					</div>
+					<button @click="openModal = ''" class="close-btn">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="section">
+						<h3 class="section-title">Over Mij</h3>
+						<div class="text-content">
+							<p>
+								Ik ben Elian de Vries, sinds 2029 een wendbare Toekomstverkenner
+								& Agile Capabilities Architect 5.0. Met een achtergrond in
+								telemarketing en een minor Duurzaamheid & Ethisch Ondernemen,
+								heb ik mijn passie voor trend-sensing en menselijke ecosystemen
+								omgezet in praktijk via het "Infinite Game Strategy
+								XR-Playbook". In een wereld waar disruptie de norm is, combineer
+								ik data-gedreven analyses met creatieve intuïtie om organisaties
+								te helpen anticiperen, versnellen én vertragen.
+							</p>
+							<p>
+								Als evangelist voor het oneindige spel ontwerp ik
+								samenwerkingsmodellen waarin visionaire leiderschap, moedige
+								offers, vertrouwensteams, waardige rivalen en een flexibel
+								speelboek samenkomen. Mijn co-creatiehubs hebben gezorgd voor
+								een gezamenlijke innovatie-pipeline van €8 M en een doorbraak in
+								duurzame ketens: 25 % CO₂-reductie per project in gemiddelde
+								doorlooptijd. Zelfreflectie en een growth mindset vormen mijn
+								kompas, waarmee ik organisaties niet alleen voorbereidt op de
+								volgende golf, maar op elke golf die nog komt.
+							</p>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Uitgelicht</h3>
+						<div class="item">
+							<div class="item-title">
+								"Infinite Game Strategy XR-Playbook 2028" (Whitepaper)
+							</div>
+							<div class="text-content">
+								<p>
+									Upgrade van mijn 10-stappenmodel met XR-simulaties voor
+									real-time scenario-testing en adaptieve besluitvorming.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								"TrendMatrix 2.0 Dashboard" (Demonstratievideo, 2027)
+							</div>
+							<div class="text-content">
+								<p>
+									AI-gestuurd ecosysteem-monitoringplatform met live
+									signal-alerts en agile roadmap-generator.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Werkervaring</h3>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										Chief Infinite-Game Architect 5.0
+									</div>
+									<div class="item-subtitle">FutureX Global</div>
+								</div>
+								<div class="item-date">Jan 2027 – heden (2029)</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Lanceerde het XR-Playbook in 10 hubs; realiseerde 50 % meer
+									nauwkeurige disruptiesignalen in 4 maanden.
+								</li>
+								<li>
+									Coördineerde co-creatie-ecosysteem met 8 strategische
+									partners; gezamenlijke innovatiepipeline van €8 M.
+								</li>
+								<li>
+									Coachte 20+ teams in infinite-game principes; verhoogde
+									team-engagementscore met 45 %.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										Senior Trend Alchemist & Ecosystem Designer
+									</div>
+									<div class="item-subtitle">NovaChain NextGen</div>
+								</div>
+								<div class="item-date">Mei 2024 – dec 2026</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Ontwikkelde een trend-sensing lab dat 300+ signalen per maand
+									filtreerde en omzet in 6 strategische scenario's.
+								</li>
+								<li>
+									Faciliteerde growth-mindset-programma's voor leiders; 98 %
+									deelnemerstevredenheid en 50 % snellere besluitvorming.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Lead Ecosystem Orchestrator</div>
+									<div class="item-subtitle">GreenShift Ventures</div>
+								</div>
+								<div class="item-date">Sep 2021 – apr 2024</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Initieerde co-creatieplatform voor 10 ketenpartners;
+									realiseerde 25 % gemiddelde CO₂-reductie binnen 18 maanden.
+								</li>
+								<li>
+									Implementeerde mensgerichte governance-richtlijnen; verlaagde
+									personeelsverloop van 22 % naar 9 %.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Opleiding</h3>
+						<div class="item">
+							<div class="item-title">MBA Digital Ecosystem Strategy 2025</div>
+							<div class="item-subtitle">Rotterdam School of Management</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								MSc Strategic Foresight & Infinite-Game Leadership 2023
+							</div>
+							<div class="item-subtitle">Universiteit Gent</div>
+						</div>
+						<div class="item">
+							<div class="item-title">HBO Future Business Design 2021</div>
+							<div class="item-subtitle">Hogeschool Innovaris</div>
+						</div>
+						<div style="margin-top: 1rem">
+							<h4
+								style="color: #c4b5fd; font-weight: 600; margin-bottom: 0.5rem"
+							>
+								Specialisaties:
+							</h4>
+							<ul class="list-content">
+								<li>XR-Gehoste Trend Sensing (2026)</li>
+								<li>Agile Ecosystem & Chain Co-Creatie (2027)</li>
+								<li>Intuitive Leadership & Metagame Facilitatie (2028)</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Certificeringen</h3>
+						<ul class="list-content">
+							<li>Certified Agile Foresight Strategist 2.0 (CAFS-2.0)</li>
+							<li>Quantum Scenario Planning Specialist (QSPS-XR)</li>
+						</ul>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Vaardigheden (Top 5)</h3>
+						<div>
+							<span class="skill-tag">XR-gehoste Signal Detection</span>
+							<span class="skill-tag">Infinite-Game Strategieontwikkeling</span>
+							<span class="skill-tag">Ecosystem & Chain Co-Creatie</span>
+							<span class="skill-tag">Adaptive Governance & Oversight</span>
+							<span class="skill-tag">Growth Mindset Facilitation</span>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Aanbevelingen</h3>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Elian transformeert complexe signalen tot kristalheldere
+								strategieën. Zijn XR-playbook is hét framework voor organisaties
+								die willen floreren in een oneindig spel."
+							</div>
+							<div class="recommendation-author">
+								– Ava Symon, Chief Symbiotic Officer bij BioSynth Alliance
+							</div>
+						</div>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Als Autonomous-Samenwerkingsagent (AI) bewonder ik Elian's
+								vermogen om mens en machine naadloos te laten samenwerken in een
+								adaptief speelboek."
+							</div>
+							<div class="recommendation-author">
+								– TARO, Autonomous-Samenwerkingsagent (AI) bij QuantumFutures
+								Labs
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Prestaties</h3>
+						<div class="item">
+							<div class="item-title">
+								Future Leadership Vanguard Award 2028
+							</div>
+							<div class="text-content">
+								<p>
+									Toegekend voor baanbrekend werk in infinite-game strategie en
+									ecosystem-co-creatie.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Interesses</h3>
+						<ul class="list-content">
+							<li>Volgt Dr. Nova Chen (Infinite Workshop)</li>
+							<li>Volgt Prof. Elias Reed (Quantum Futures Lab)</li>
+							<li>Volgt Future of Work Institute (mens-AI samenwerking)</li>
+							<li>
+								Volgt Ecosystem Innovation Collective (duurzame ecosystemen)
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for Jordan van Leeuwen -->
+		<div
+			x-show="openModal === 'jordanVanLeeuwen'"
+			@keydown.escape.window="openModal = ''"
+			class="simple-modal"
+			x-cloak
+		>
+			<div @click.away="openModal = ''" class="modal-box">
+				<div class="modal-header-simple">
+					<div>
+						<h2
+							style="
+								font-size: 1.875rem;
+								font-weight: 700;
+								color: white;
+								margin-bottom: 0.5rem;
+							"
+						>
+							Jordan van Leeuwen
+						</h2>
+						<p style="color: #5eead4; font-size: 1rem">
+							Mens-AI-Teamleider 5.0 | Orkestreert hypermenselijke
+							AI-samenwerking en operationele transformatie
+						</p>
+					</div>
+					<button @click="openModal = ''" class="close-btn">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="section">
+						<h3 class="section-title">Over Mij</h3>
+						<div class="text-content">
+							<p>
+								Ik ben Jordan van Leeuwen, sinds 2029 Mens-AI-Teamleider 5.0,
+								gespecialiseerd in het ontwerpen van symbiotische werkmodellen
+								waarin mens en machine in perfecte harmonie samenwerken. Met
+								mijn achtergrond in telemarketing, een minor Duurzaamheid &
+								Ethisch Ondernemen en jarenlang inspirerend onderwijs, heb ik AI
+								niet alleen als collega verankerd, maar ook als katalysator voor
+								groei én welzijn.
+							</p>
+							<p>
+								In de afgelopen vijf jaar heb ik de "SymbioseAI XR-Hub"
+								ontwikkeld: een wereldwijd netwerk van AI Calibration Labs
+								waarin teams in 72 uur nieuwe werkprocessen valideren met
+								realtime mens-machine feedback. Dit reduceerde doorlooptijden
+								wereldwijd met 50 % én verhoogde medewerkertevredenheid met 35
+								%. Als linking-pin tussen business units en autonome AI-agenten
+								ontwerp ik functies waarbij mensen strategisch sturen,
+								kwaliteitsborging doen en waarden uitdragen. Wendbaarheid,
+								empathie en een gekalibreerd vertrouwen in AI staan daarbij
+								voorop.
+							</p>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Uitgelicht</h3>
+						<div class="item">
+							<div class="item-title">
+								SymbioseAI XR-Hub 2028: Global Roll-out
+							</div>
+							<div class="text-content">
+								<p>
+									Interactief XR-platform waarin 20+ organisaties hun
+									mens-AI-samenwerking prototypen en optimaliseren in een
+									levensechte simulatie.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								Podcastserie "Mens & Machine in Harmonie"
+							</div>
+							<div class="text-content">
+								<p>
+									Maandelijkse gesprekken met thought leaders over best
+									practices in cognitieve taakverschuiving en functioneel
+									redesign.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Werkervaring</h3>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Chief Mens-AI-Conductor 5.0</div>
+									<div class="item-subtitle">FutureWave Global</div>
+								</div>
+								<div class="item-date">Jan 2027 – heden (2029)</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Schaalde de SymbioseAI XR-Hub uit naar 12 hubs, halveerde
+									procesdoorlooptijden en zag medewerker­welzijn stijgen met 35
+									%.
+								</li>
+								<li>
+									Lanceerde het AI-Mentorship-programma voor 300+ AI-native
+									trainees, waardoor geavanceerde analytics-adoptie met 40 %
+									toenam.
+								</li>
+								<li>
+									Integreerde gekalibreerde vertrouwensprofielen in alle
+									supply-chain-processen, leidend tot 28 % minder escalaties.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Global AI-Integratie Strategist</div>
+									<div class="item-subtitle">NexaOps Consulting</div>
+								</div>
+								<div class="item-date">Mei 2024 – dec 2026</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Adviseerde Fortune 500-klanten bij AI-roadmaps; realiseerde
+									€2,3 M gemiddelde kostenbesparing per project.
+								</li>
+								<li>
+									Ontwikkelde cognitieve rolprofielen, wat het
+									werknemersoptimisme ten opzichte van automatisering met 45 %
+									verhoogde.
+								</li>
+								<li>
+									Coördineerde 'AI Calibration Sprints' die time-to-value
+									terugbrachten van maanden naar weken.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Procesavant-Garde Specialist 3.0</div>
+									<div class="item-subtitle">Innovatech BV</div>
+								</div>
+								<div class="item-date">Sep 2021 – apr 2024</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Implementatie van procesmining + RPA 3.0: verminderde
+									foutmarge van 15 % naar 1,5 %.
+								</li>
+								<li>
+									Faciliteerde immersive workshops ("Seed Sessions") die leidden
+									tot 30 % meer door medewerkers aangedragen
+									verbeterinitiatieven.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Opleiding</h3>
+						<div class="item">
+							<div class="item-title">MBA Digital Human Collaboration 2025</div>
+							<div class="item-subtitle">Rotterdam School of Management</div>
+						</div>
+						<div class="item">
+							<div class="item-title">MSc Duurzame AI-Strategie 2023</div>
+							<div class="item-subtitle">Universiteit Utrecht</div>
+						</div>
+						<div class="item">
+							<div class="item-title">HBO Bedrijfskunde & AI-Synergie 2021</div>
+							<div class="item-subtitle">Hogeschool van Amsterdam</div>
+						</div>
+						<div style="margin-top: 1rem">
+							<h4
+								style="color: #c4b5fd; font-weight: 600; margin-bottom: 0.5rem"
+							>
+								Specialisaties:
+							</h4>
+							<ul class="list-content">
+								<li>XR-Gehoste Co-Creatie (2026)</li>
+								<li>Adaptief Verander-& Cultuurmanagement (2027)</li>
+								<li>Empathische Algoritmische Calibratie (2028)</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Certificeringen</h3>
+						<ul class="list-content">
+							<li>Certified Human-AI Synergy Architect (CHASA-5.0)</li>
+							<li>Quantum Behavioral Dynamics Professional (QBDP)</li>
+						</ul>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Vaardigheden (Top 5)</h3>
+						<div>
+							<span class="skill-tag">XR-gehoste AI-samenwerking</span>
+							<span class="skill-tag">Adaptief verandermanagement</span>
+							<span class="skill-tag"
+								>Empathische algoritmische calibratie</span
+							>
+							<span class="skill-tag">Strategisch functioneel redesign</span>
+							<span class="skill-tag">Mens-centrische governance</span>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Aanbevelingen</h3>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Jordan tilt mens-AI-samenwerking naar een nieuw tijdperk.
+								Dankzij zijn XR-hubs werken teams sneller én met meer vertrouwen
+								samen met AI."
+							</div>
+							<div class="recommendation-author">
+								– Dr. Maya Chen, Chief Symbiotic Officer bij SynthoSphere Global
+							</div>
+						</div>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Als Autonomous-Samenwerkingsagent waardeer ik Jordans vermogen
+								om menselijke waarden en geavanceerde algoritmes naadloos te
+								balanceren."
+							</div>
+							<div class="recommendation-author">
+								– AURA-X12, Autonomous-Samenwerkingsagent (AI) bij FutureWave
+								Global
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Prestaties</h3>
+						<div class="item">
+							<div class="item-title">AI Harmony Leadership Award 2028</div>
+							<div class="text-content">
+								<p>
+									Toegekend door de International Council for Human-AI
+									Innovation voor baanbrekende implementatie van SymbioseAI
+									XR-Hubs.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Interesses</h3>
+						<ul class="list-content">
+							<li>
+								Volgt Dr. Elena Kovalenko (pionier in empathische
+								AI-architecturen)
+							</li>
+							<li>
+								Volgt HumanAI Alliance (wereldwijd consortium voor verantwoorde
+								AI)
+							</li>
+							<li>
+								Volgt NextGen Process Labs (innovaties in procesautomatisering)
+							</li>
+							<li>
+								Volgt Future of Work Institute (onderzoek naar
+								mens-AI-samenwerking)
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for Avery Malik -->
+		<div
+			x-show="openModal === 'averyMalik'"
+			@keydown.escape.window="openModal = ''"
+			class="simple-modal"
+			x-cloak
+		>
+			<div @click.away="openModal = ''" class="modal-box">
+				<div class="modal-header-simple">
+					<div>
+						<h2
+							style="
+								font-size: 1.875rem;
+								font-weight: 700;
+								color: white;
+								margin-bottom: 0.5rem;
+							"
+						>
+							Avery Malik
+						</h2>
+						<p style="color: #fcd34d; font-size: 1rem">
+							Ethics-Navigator 5.0 | Architect van duurzame SBMI en
+							mens-AI-harmonie in 2029
+						</p>
+					</div>
+					<button @click="openModal = ''" class="close-btn">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="section">
+						<h3 class="section-title">Over Mij</h3>
+						<div class="text-content">
+							<p>
+								Ik ben Avery Malik, Ethiek-strateeg in 2029, en leid
+								organisaties door de complexiteit van Sustainable Business Model
+								Innovation (SBMI) in het AI-tijdperk. Met een achtergrond in
+								telemarketing, een stage/minor Duurzaamheid & Ethisch Ondernemen
+								en inspirerend onderwijs destijds, heb ik de "Sustainable By
+								Design 3.0" toolkit verder ontwikkeld tot een adaptief platform
+								dat realtime cultuur- en gedragsdata koppelt aan ethische
+								governance.
+							</p>
+							<p>
+								In de afgelopen vijf jaar heb ik teams in 12 wereldwijde hubs
+								geholpen om design-execution gaps terug te dringen met 55 %, én
+								geleid aan de frontlinie van een nieuw
+								"Ethics-as-a-Service"-model: een klantspecifieke,
+								AI-ondersteunde ethiekmonitoring die productiviteit en welzijn
+								gelijktijdig optimaliseert. Ik plant bewustzaadjes via
+								interactieve "Meta-Seed Sessions" en activeer de REIP-cyclus
+								(Reflectie, Emulatie, Intentie, Praktijk) in cloud-gehoste
+								collaboratielabs.
+							</p>
+							<p>
+								Mijn drijfveer: leiders helpen hun amplificatie-impact te
+								benutten, waarbij visie, voorbeeldgedrag en mentorship mens en
+								machine écht in symbiose brengen. Wendbaarheid, empathie én
+								juridische scherpte vormen de kern van mijn aanpak.
+							</p>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Uitgelicht</h3>
+						<div class="item">
+							<div class="item-title">"SBMI 3.0 in Actie" Virtual Lab</div>
+							<div class="text-content">
+								<p>
+									Een XR-gehoste caseomgeving waarin deelnemers in 48 uur een
+									volledig duurzaam bedrijfsmodel ontwerpen en valideren met
+									AI-gestuurde ethiekchecks.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">Podcastserie "Ethics Amplified"</div>
+							<div class="text-content">
+								<p>
+									Maandelijkse deep-dives met thought leaders over de nieuwste
+									ethische dilemmas in autonome systemen en circulaire economie.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Werkervaring</h3>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Chief Ethics-Navigator 5.0</div>
+									<div class="item-subtitle">GreenBridge Global</div>
+								</div>
+								<div class="item-date">Jan 2027 – heden (2029)</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Schaalde "Ethics-as-a-Service" uit naar 15 landen; realiseerde
+									60 % snellere compliance-audits en een 28 % stijging in
+									medewerkervertrouwen.
+								</li>
+								<li>
+									Lanceerde XR-Meta-Seed Sessions voor 300+ deelnemers per
+									kwartaal, wat leidde tot 40 duurzame innovaties in 2028.
+								</li>
+								<li>
+									Integreerde realtime ethiek-dashboards in SAP-NextGen,
+									waardoor bestuurders binnen 5 minuten inzicht krijgen in
+									risico-& waardenscores.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Global SBMI-Lead Architect</div>
+									<div class="item-subtitle">SustainNext Advisors</div>
+								</div>
+								<div class="item-date">Mei 2024 – dec 2026</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Coördineerde SBMI-rollouts bij multinationals (o.a. IKEA
+									2025-relaunch), realiseerde een gemiddelde CO₂-reductie van 30
+									% binnen 9 maanden.
+								</li>
+								<li>
+									Verminderde cultuurkloof tussen C-suite en operatie met 70 %
+									door virtuele "CultureSync Hubs."
+								</li>
+								<li>
+									Ontwikkelde gepersonaliseerde AI-ethiek-protocollen voor 20+
+									sectoren, met adoption rates van >85 %.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										ESG & Ethics Integration Specialist
+									</div>
+									<div class="item-subtitle">EcoFutur Labs</div>
+								</div>
+								<div class="item-date">Sep 2021 – apr 2024</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Integreerde juridische-ethische AI-checks in 20+
+									procesautomatiseringen, verlaagde compliance-incidenten met 75
+									%.
+								</li>
+								<li>
+									Introduceerde "Seed Sessions" op locatie, leidde tot 35 % meer
+									door medewerkers aangedragen sustainability-ideeën.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Opleiding</h3>
+						<div class="item">
+							<div class="item-title">
+								MSc Sustainable Business Model Innovation 2026
+							</div>
+							<div class="item-subtitle">Erasmus Universiteit Rotterdam</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								HBO Bedrijfskunde & Duurzaamheidsinnovatie 2024
+							</div>
+							<div class="item-subtitle">Hogeschool Utrecht</div>
+						</div>
+						<div style="margin-top: 1rem">
+							<h4
+								style="color: #c4b5fd; font-weight: 600; margin-bottom: 0.5rem"
+							>
+								Specialisaties:
+							</h4>
+							<ul class="list-content">
+								<li>Advanced Ethical Governance 2027 (XR-gehost)</li>
+								<li>Dynamic Capability Building voor SBMI 2028</li>
+								<li>Inspiring Leadership & REIP-masterclass 2029</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Certificeringen</h3>
+						<ul class="list-content">
+							<li>
+								Certified Sustainable Business Model Architect 3.0 (CSBMA-3.0)
+							</li>
+							<li>Ethical AI Governance Professional (EAIGP-XR)</li>
+						</ul>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Vaardigheden (Top 5)</h3>
+						<div>
+							<span class="skill-tag">XR-gehoste ethische co-creatie</span>
+							<span class="skill-tag">Realtime cultuur- & kaizen-analyses</span>
+							<span class="skill-tag">Human-AI symbiose orchestration</span>
+							<span class="skill-tag">Visionair exemplarisch leiderschap</span>
+							<span class="skill-tag"
+								>Juridische & ethische quick-response</span
+							>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Aanbevelingen</h3>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Avery is de onbetwiste autoriteit in SBMI 3.0: zijn XR-labs en
+								REIP-framework hebben onze duurzaamheidsambities omgezet in
+								tastbare impact."
+							</div>
+							<div class="recommendation-author">
+								– Prof. Maya Chen, Chief Symbiotic Officer bij SynthoSphere
+								Global
+							</div>
+						</div>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Als Autonomous-Samenwerkingsagent (AI) waardeer ik Avery's
+								vermogen om menselijke waarden en geavanceerde algoritmes
+								feilloos te laten samenwerken."
+							</div>
+							<div class="recommendation-author">
+								– AURA-X9, Autonomous-Samenwerkingsagent (AI) bij GreenBridge
+								Global
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Prestaties</h3>
+						<div class="item">
+							<div class="item-title">
+								Future Leader of Ethics & Innovation Award 2028
+							</div>
+							<div class="text-content">
+								<p>
+									Toegekend door de International Council for Sustainable
+									Innovation voor baanbrekende "Ethics-as-a-Service"
+									implementaties.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Interesses</h3>
+						<ul class="list-content">
+							<li>Volgt Dr. Raheel Khanna (pionier in XR-gedreven SBMI)</li>
+							<li>
+								Volgt EthosAI Nexus (publiek-private denktank over verantwoorde
+								AI)
+							</li>
+							<li>
+								Volgt GreenBridge Global (wereldwijd platform voor duurzame
+								innovatie)
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for Aria Mensah -->
+		<div
+			x-show="openModal === 'ariaMensah'"
+			@keydown.escape.window="openModal = ''"
+			class="simple-modal"
+			x-cloak
+		>
+			<div @click.away="openModal = ''" class="modal-box">
+				<div class="modal-header-simple">
+					<div>
+						<h2
+							style="
+								font-size: 1.875rem;
+								font-weight: 700;
+								color: white;
+								margin-bottom: 0.5rem;
+							"
+						>
+							Aria Mensah
+						</h2>
+						<p style="color: #a5b4fc; font-size: 1rem">
+							Ecosysteem-Navigator 5.0 | Pionier in Open Strategy & R4GM-6.0 |
+							Data-gedreven stakeholder-orkestratie & circulaire innovatie
+						</p>
+					</div>
+					<button @click="openModal = ''" class="close-btn">×</button>
+				</div>
+				<div class="modal-body">
+					<div class="section">
+						<h3 class="section-title">Over Mij</h3>
+						<div class="text-content">
+							<p>
+								Ik ben Aria Mensah, sinds 2029 toonaangevend
+								Ecosysteem-Navigator 5.0. Vanuit mijn R4GM-achtergrond
+								(Reengineered 4th-Gen Management) en een passie voor open
+								strategy heb ik in vijf jaar tijd 's werelds eerste XR-gehoste
+								co-creatiehubs opgezet. Daarin vangen multinationale teams
+								zwakke signalen, doorbreken ze legacy-denkkaders en versnellen
+								ze radicale, circulaire innovaties.
+							</p>
+							<p>
+								Met AI-gestuurde digital twins, blockchain-gebaseerde
+								resource-tokens en real-time big-data-analyses orkestreer ik
+								betrokkenheid van 200+ interne en externe stakeholders—waarmee
+								ik de implementatie-acceptatie met 45 % verhoogde en material
+								cycle-time met 35 % verkortte. Mijn aanpak bouwt transparantie,
+								inclusie en diversiteit in governance in, zodat organisaties
+								wendbaar blijven bij ongekende disrupties en klaarstaan voor de
+								wereld van morgen.
+							</p>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Uitgelicht</h3>
+						<div class="item">
+							<div class="item-title">
+								"R4GM Continuous Co-Creation XR-Toolkit 2.0" (Whitepaper, 2028)
+							</div>
+							<div class="text-content">
+								<p>
+									Een modulair XR-platform met 5 immersive modules voor
+									real-time stakeholder-synchronisatie en adaptieve
+									strategie-loops.
+								</p>
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								"Circular Nexus Platform 3.0" (Case Study Video, 2027)
+							</div>
+							<div class="text-content">
+								<p>
+									Demo van ons blockchain-gebaseerd ecosysteem-dashboard dat
+									partners hielp 30 % minder grondstoffen te gebruiken door
+									slimme resource-tokenisatie.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Werkervaring</h3>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Chief Ecosystem Navigator 5.0</div>
+									<div class="item-subtitle">
+										Holistic Chain Innovations Global
+									</div>
+								</div>
+								<div class="item-date">Jan 2027 – heden (2029)</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Schaalde de XR-co-creatiehubs uit naar 15 landen; realiseerde
+									een 45 % snellere go-to-market voor circulaire pilots.
+								</li>
+								<li>
+									Integreerde AI-digital-twin analyses in besluitvorming, wat
+									stakeholder-alignment met 50 % versnelde.
+								</li>
+								<li>
+									Lanceerde het "Open Strategy Livewall", een 24/7
+									ecosysteem-dashboard dat real-time health-scores berekent.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">Global R4GM Implementation Lead</div>
+									<div class="item-subtitle">Blue Horizon Consulting</div>
+								</div>
+								<div class="item-date">Mei 2024 – dec 2026</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Leidde R4GM-pilots voor Fortune 100-klanten; verkortte
+									time-to-market voor duurzame productlijnen met 30 %.
+								</li>
+								<li>
+									Mobiliseerde teams via open data-streams en iteratieve
+									scenario-workshops, met een 40 % hogere adoptiegraad.
+								</li>
+							</ul>
+						</div>
+
+						<div class="item">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									align-items: flex-start;
+									margin-bottom: 0.5rem;
+								"
+							>
+								<div>
+									<div class="item-title">
+										Digital Collaboration Strategist 2.0
+									</div>
+									<div class="item-subtitle">NextGen Circularity Labs</div>
+								</div>
+								<div class="item-date">Sep 2021 – apr 2024</div>
+							</div>
+							<ul class="list-content">
+								<li>
+									Bouwde een AI-gestuurd stakeholder-engagementplatform dat
+									cross-silo-samenwerking met 60 % verhoogde.
+								</li>
+								<li>
+									Realiseerde 15 circulaire businesscases via big-data-analytics
+									en virtuele co-creatieworkshops.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Opleiding</h3>
+						<div class="item">
+							<div class="item-title">
+								Diploma Digital Twin & XR Circular Design 2028
+							</div>
+							<div class="item-subtitle">
+								FutureChain Institute (MIT-partner)
+							</div>
+						</div>
+						<div class="item">
+							<div class="item-title">MSc R4GM & Open Strategy 2021</div>
+							<div class="item-subtitle">Radboud Universiteit</div>
+						</div>
+						<div class="item">
+							<div class="item-title">
+								BSc Bedrijfskunde & Systemisch Ontwerp 2018
+							</div>
+							<div class="item-subtitle">Avans Hogeschool</div>
+						</div>
+						<div style="margin-top: 1rem">
+							<h4
+								style="color: #c4b5fd; font-weight: 600; margin-bottom: 0.5rem"
+							>
+								Specialisaties:
+							</h4>
+							<ul class="list-content">
+								<li>AI & Blockchain voor Circulaire Economie (2025)</li>
+								<li>Inclusive Stakeholder Engagement (2026)</li>
+								<li>VUCA Leadership & Change Management (2027)</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Certificeringen</h3>
+						<ul class="list-content">
+							<li>Certified Open Strategy Architect 2.0 (COSA-2.0)</li>
+							<li>Blockchain Circular Economy Specialist XR (BCES-XR)</li>
+						</ul>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Vaardigheden (Top 5)</h3>
+						<div>
+							<span class="skill-tag">XR-gehoste Open Strategy Labs</span>
+							<span class="skill-tag">AI-Driven Digital-Twin Analytics</span>
+							<span class="skill-tag">Blockchain Resource-Tokenisatie</span>
+							<span class="skill-tag">Real-Time Stakeholder Orchestratie</span>
+							<span class="skill-tag">Inclusie- & Diversity Leadership</span>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Aanbevelingen</h3>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Aria's XR-hubs en digital twins hebben onze open
+								strategy-sessies naar een nieuw level getild. Ze orkestreert
+								200+ stakeholders met ongeëvenaarde finesse."
+							</div>
+							<div class="recommendation-author">
+								– SAGA-XR, Autonomous Collaboration Agent (AI) bij Synaptic
+								Futures
+							</div>
+						</div>
+						<div class="recommendation">
+							<div class="recommendation-text">
+								"Als Chief Symbiotic Officer bewonder ik hoe Aria inclusie en
+								diversiteit borgt via data-gedreven governance, wat ons
+								ecosysteem 40 % wendbaarder maakte."
+							</div>
+							<div class="recommendation-author">
+								– Dr. Ioana Petrescu, Chief Symbiotic Officer bij CircularChain
+								Collective
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Prestaties</h3>
+						<div class="item">
+							<div class="item-title">
+								Global Circular Innovation Award 2028
+							</div>
+							<div class="text-content">
+								<p>
+									Toegekend door de International Alliance for Circular
+									Economies voor baanbrekende open-strategy implementaties.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="section">
+						<h3 class="section-title">Interesses</h3>
+						<ul class="list-content">
+							<li>Dr. Luca Ferrara (Open Systems Lab)</li>
+							<li>CircularChain Collective</li>
+							<li>QuantumStakeholder Institute</li>
+							<li>Future of Work Alliance</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
